@@ -28,6 +28,13 @@
   }
 
   let tileSource = $derived(activeView ? buildTileSource(activeView) : null);
+  let crop = $derived(activeView?.is_crop ? {
+    x: activeView.crop_x,
+    y: activeView.crop_y,
+    width: activeView.crop_width,
+    height: activeView.crop_height,
+    imageWidth: activeView.image_width,
+  } : null);
   let defaultView = $derived(mapset?.views?.find(v => v.ordinal === 1));
   let detailViews = $derived(mapset?.views?.filter(v => v.ordinal > 1) ?? []);
 
@@ -57,26 +64,28 @@
   {:else}
     <h2>{mapset.title}</h2>
     <div class="image-viewer">
-      {#if tileSource}
-        <OpenSeadragonViewer {tileSource} />
-      {/if}
+      {#key activeView?.id}
+        {#if tileSource}
+          <OpenSeadragonViewer {tileSource} {crop} />
+        {/if}
+      {/key}
     </div>
     <div class="text">
       <ul>
         {#if defaultView}
           <li>
-            <a href={'javascript:void(0)'} class:active={activeView === defaultView}
+            <button class:active={activeView === defaultView}
                onclick={() => selectView(defaultView)}>
               Full view
-            </a>
+            </button>
           </li>
         {/if}
         {#each detailViews as view}
           <li>
-            <a href={'javascript:void(0)'} class:active={activeView === view}
+            <button class:active={activeView === view}
                onclick={() => selectView(view)}>
               {view.caption || `Detail ${view.ordinal}`}
-            </a>
+            </button>
           </li>
         {/each}
       </ul>
@@ -124,11 +133,17 @@
     padding-right: 2em;
   }
 
-  .text a {
+  .text button {
+    background: none;
+    border: none;
     color: yellow;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: none;
   }
 
-  .text a.active {
+  .text button.active {
     text-decoration: underline;
   }
 
