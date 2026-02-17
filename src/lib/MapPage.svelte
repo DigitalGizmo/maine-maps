@@ -35,8 +35,6 @@
     height: activeView.crop_height,
     imageWidth: activeView.image_width,
   } : null);
-  let defaultView = $derived(mapset?.views?.find(v => v.ordinal === 1));
-  let detailViews = $derived(mapset?.views?.filter(v => v.ordinal > 1) ?? []);
 
   function selectView(view) {
     activeView = view;
@@ -55,7 +53,7 @@
 </script>
 
 <div class="map-page">
-  <h1>Maps of Maine</h1>
+  <h1><a href="#/">Maps of Maine</a></h1>
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
@@ -72,19 +70,11 @@
     </div>
     <div class="text">
       <ul>
-        {#if defaultView}
-          <li>
-            <button class:active={activeView === defaultView}
-               onclick={() => selectView(defaultView)}>
-              Full view
-            </button>
-          </li>
-        {/if}
-        {#each detailViews as view}
+        {#each mapset.views as view}
           <li>
             <button class:active={activeView === view}
                onclick={() => selectView(view)}>
-              {view.caption || `Detail ${view.ordinal}`}
+              {view.caption || `View ${view.ordinal}`}
             </button>
           </li>
         {/each}
