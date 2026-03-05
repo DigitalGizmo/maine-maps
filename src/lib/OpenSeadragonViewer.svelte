@@ -8,7 +8,7 @@
   let viewer;
 
   let width = '100%';
-  let height = '70vh';
+  let height = '100%';
 
   function applyCrop() {
     if (!viewer || !crop) return;

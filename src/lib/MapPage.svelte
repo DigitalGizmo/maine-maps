@@ -4,6 +4,15 @@
 
   let { slug } = $props();
 
+  // Layout config — will come from API in a future phase
+  let mapOrientation = 'vertical'; // 'vertical' | 'horizontal'
+  let aspectRatio = '3/5';
+  // let mapOrientation = 'horizontal'; // 'vertical' | 'horizontal'
+  // let aspectRatio = '4/3';
+  let portraitVerticalMaxHeight = '60vh';
+  let landscapeHorizontalMaxWidth = '60vw';
+  let landscapeVerticalHeight = 'calc(100vh - 8em)';
+
   const API_BASE = import.meta.env.VITE_API_BASE;
   const TILES_BASE = 'https://assets.digitalgizmo.com/maine-maps/tiles';
 
@@ -61,33 +70,103 @@
     <p>Loading...</p>
   {:else}
   <h2>{mapset.title}</h2><!-- map title -->
-  <div class="image-area">
+  <div class="map-layout">
+    <div
+      class="image-area"
+      class:vertical={mapOrientation === 'vertical'}
+      class:horizontal={mapOrientation === 'horizontal'}
+      style="
+        --aspect-ratio: {aspectRatio};
+        --portrait-max-height: {portraitVerticalMaxHeight};
+        --landscape-max-width: {landscapeHorizontalMaxWidth};
+        --landscape-vertical-height: {landscapeVerticalHeight};
+      "
+    >
+      <div class="image-viewer"><!-- image viewer-->
+        {#key activeView?.id}
+          {#if tileSource}
+            <OpenSeadragonViewer {tileSource} {crop} />
+          {/if}
+        {/key}
+      </div>
 
-    <div class="image-viewer"><!-- image viewer-->
-      {#key activeView?.id}
-        {#if tileSource}
-          <OpenSeadragonViewer {tileSource} {crop} />
-        {/if}
-      {/key}
+      <div class="detail-thms">
+        <ul><!-- detail thumbnails -->
+          {#each mapset.views as view}
+            <li class:active={activeView === view}>
+              <button
+                onclick={() => selectView(view)}>
+                {view.caption || `View ${view.ordinal}`}
+              </button>
+            </li>
+          {/each}
+        </ul>
+      </div>
     </div>
-    
-    <div class="detail-thms">
-      <ul><!-- detail thumbnails -->
-        {#each mapset.views as view}
-          <li class:active={activeView === view}>
-            <button
-              onclick={() => selectView(view)}>
-              {view.caption || `View ${view.ordinal}`}
-            </button>
-          </li>
-        {/each}
-      </ul>
-    </div>
-  </div>
 
-  <div class="text-area">
-    <h2>This is the subhead</h2>
-      {@html activeView.interpretive_text}
+    <div class="text-area">
+      <h2>This is the subhead</h2>
+        {@html activeView.interpretive_text}
+    </div>
   </div>
   {/if}
 </div><!-- /map-page -->
+
+<style>
+  /* Portrait (default): stacked layout */
+  .map-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image-area {
+    aspect-ratio: var(--aspect-ratio);
+    background-color: beige; /* dev aid */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Portrait + vertical: set definite height so aspect-ratio can derive width */
+  .image-area.vertical {
+    height: var(--portrait-max-height);
+    width: auto;
+    align-self: flex-start;
+  }
+
+  /* Portrait + horizontal: full width */
+  .image-area.horizontal {
+    width: 100%;
+  }
+
+  /* OSD viewer fills image-area minus thumbnails */
+  .image-viewer {
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* Landscape: side-by-side */
+  @media (orientation: landscape) {
+    .map-layout {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    /* Vertical map: fixed height, width from aspect-ratio */
+    .image-area.vertical {
+      max-height: none;
+      height: var(--landscape-vertical-height);
+      width: auto;
+    }
+
+    /* Horizontal map: definite width so aspect-ratio can derive height */
+    .image-area.horizontal {
+      width: var(--landscape-max-width);
+    }
+
+    .text-area {
+      flex: 1;
+      height: auto;
+      overflow-y: auto;
+    }
+  }
+</style>
