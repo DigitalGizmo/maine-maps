@@ -86,6 +86,7 @@
   </div>
 
   <div class="text-area">
+    <h2>This is the subhead</h2>
       {@html activeView.interpretive_text}
   </div>
   {/if}

@@ -8,8 +8,8 @@ body {
 #app {
   background-color: #2f2f2f;
   color: white;
-  /* min-height: 100vh;
-  width: 100vw; */
+  height: 100vh;
+  width: 100vw;
 }
 
 a:link, a:visited {
@@ -76,9 +76,11 @@ h1 {
   height: 80px;
   background-color: #444444;
 }
+
 .detail-thms ul li.active {
   border: 1px solid #ccc;
 }
+
 .detail-thms button {
   background: none;
   border: none;
@@ -88,4 +90,9 @@ h1 {
   padding: 0;
   text-decoration: none;
 }
-
+.text-area {
+  height: 30vh;
+  background-color: gray;
+  padding: 1em;
+  overflow-y: scroll;
+}
