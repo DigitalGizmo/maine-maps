@@ -53,91 +53,40 @@
 </script>
 
 <div class="map-page">
-  <h1><a href="#/">Maps of Maine</a></h1>
+  <h1><a href="#/">Maps of Maine</a></h1><!-- site title -->
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
   {:else if !mapset}
     <p>Loading...</p>
   {:else}
-    <h2>{mapset.title}</h2>
-    <div class="image-viewer">
+  <h2>{mapset.title}</h2><!-- map title -->
+  <div class="image-area">
+
+    <div class="image-viewer"><!-- image viewer-->
       {#key activeView?.id}
         {#if tileSource}
           <OpenSeadragonViewer {tileSource} {crop} />
         {/if}
       {/key}
     </div>
-    <div class="text">
-      <ul>
+    
+    <div class="detail-thms">
+      <ul><!-- detail thumbnails -->
         {#each mapset.views as view}
-          <li>
-            <button class:active={activeView === view}
-               onclick={() => selectView(view)}>
+          <li class:active={activeView === view}>
+            <button
+              onclick={() => selectView(view)}>
               {view.caption || `View ${view.ordinal}`}
             </button>
           </li>
         {/each}
       </ul>
-
-      {#if activeView?.interpretive_text}
-        <div class="interpretive-text">
-          {@html activeView.interpretive_text}
-        </div>
-      {:else}
-        <h3>Text Subhead</h3>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      {/if}
     </div>
+  </div>
+
+  <div class="text-area">
+      {@html activeView.interpretive_text}
+  </div>
   {/if}
-</div>
-
-<style>
-  .map-page {
-    padding: 2em;
-  }
-
-  .image-viewer {
-    max-width: 1080px;
-  }
-
-  .text {
-    max-width: 1080px;
-    padding-bottom: 4em;
-  }
-
-  .text ul {
-    list-style-type: none;
-    padding-left: 0;
-  }
-
-  .text ul li {
-    display: inline;
-    padding-right: 2em;
-  }
-
-  .text button {
-    background: none;
-    border: none;
-    color: yellow;
-    font: inherit;
-    cursor: pointer;
-    padding: 0;
-    text-decoration: none;
-  }
-
-  .text button.active {
-    text-decoration: underline;
-  }
-
-  .error {
-    color: #ff6b6b;
-  }
-</style>
+</div><!-- /map-page -->

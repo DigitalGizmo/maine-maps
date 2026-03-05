@@ -39,32 +39,3 @@
     </nav>
   {/if}
 </div>
-
-<style>
-  .home {
-    padding: 2em;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    margin-bottom: 1em;
-  }
-
-  a {
-    color: yellow;
-    font-size: 1.2em;
-  }
-
-  .description {
-    margin: 0.25em 0 0;
-    color: #ccc;
-  }
-
-  .error {
-    color: #f66;
-  }
-</style>

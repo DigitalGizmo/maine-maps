@@ -2,11 +2,90 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 200;
 }
 
 #app {
-  background-color: black;
+  background-color: #2f2f2f;
   color: white;
-  min-height: 100vh;
-  width: 100vw;
+  /* min-height: 100vh;
+  width: 100vw; */
 }
+
+a:link, a:visited {
+  color:rgb(59, 102, 255);
+  text-decoration: none;
+}
+
+h1 {
+  font-weight: 400;
+ }
+
+.home {
+  padding: 2em;
+}
+
+.home ul {
+  list-style: none;
+  padding: 0;
+}
+
+.home ul li {
+  font-weight: 400;
+  margin-bottom: 1em;
+}
+
+.home ul li a {
+  font-weight: 600;
+  font-size: 1.5em;
+}
+
+.description {
+  margin: 0.25em 0 0;
+  color: #ccc;
+}
+
+.error {
+  color: #f66;
+}
+
+.map-page {
+  padding: 2em;
+}
+
+.image-viewer {
+  max-width: 1080px;
+  background-color: antiquewhite;
+}
+
+.detail-thms {
+
+}
+
+.detail-thms ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.detail-thms ul li {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 1em;
+  padding: .25em;
+  width: 80px;
+  height: 80px;
+  background-color: #444444;
+}
+.detail-thms ul li.active {
+  border: 1px solid #ccc;
+}
+.detail-thms button {
+  background: none;
+  border: none;
+  color: yellow;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+}
+
