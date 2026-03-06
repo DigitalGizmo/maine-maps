@@ -4,11 +4,6 @@
 
   let { slug } = $props();
 
-  // Layout config — will come from API in a future phase
-  let mapOrientation = 'vertical'; // 'vertical' | 'horizontal'
-  let aspectRatio = '3/5';
-  // let mapOrientation = 'horizontal'; // 'vertical' | 'horizontal'
-  // let aspectRatio = '4/3';
   let portraitVerticalMaxHeight = '60vh';
   let landscapeHorizontalMaxWidth = '60vw';
   let landscapeVerticalHeight = 'calc(100vh - 8em)';
@@ -17,6 +12,8 @@
   const TILES_BASE = 'https://assets.digitalgizmo.com/maine-maps/tiles';
 
   let mapset = $state(null);
+  let mapOrientation = $derived(mapset?.map_orientation ?? 'vertical');
+  let aspectRatio = $derived(mapset?.aspect_ratio ?? '3/5');
   let activeView = $state(null);
   let error = $state(null);
 
