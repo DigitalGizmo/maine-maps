@@ -118,7 +118,6 @@
 
   .image-area {
     aspect-ratio: var(--aspect-ratio);
-    background-color: beige; /* dev aid */
     display: flex;
     flex-direction: column;
   }
@@ -139,6 +138,7 @@
   .image-viewer {
     flex: 1;
     min-height: 0;
+    background-color: beige; /* dev aid */
   }
 
   /* Landscape: side-by-side */
