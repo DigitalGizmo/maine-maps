@@ -4,9 +4,11 @@
 
   let { slug } = $props();
 
-  let portraitVerticalMaxHeight = '60vh';
-  let landscapeHorizontalMaxWidth = '60vw';
-  let landscapeVerticalHeight = 'calc(100vh - 8em)';
+  let portraitVerticalMaxHeight   = '70vh';
+  let portraitHorizontalMaxWidth  = '90vw';
+  let landscapeVerticalMaxHeight  = '90vh';
+  let landscapeHorizontalMaxWidth = '50vw';
+  let thumbnailHeightLandscape    = '8vh';
 
   const API_BASE = import.meta.env.VITE_API_BASE;
   const TILES_BASE = 'https://assets.digitalgizmo.com/maine-maps/tiles';
@@ -58,111 +60,117 @@
   });
 </script>
 
-<div class="map-page">
-  <h1><a href="#/">Maps of Maine</a></h1><!-- site title -->
+<div class="map-page" style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
   {:else if !mapset}
     <p>Loading...</p>
   {:else}
-  <h2>{mapset.title}</h2><!-- map title -->
-  <div class="map-layout">
-    <div
-      class="image-area"
-      class:vertical={mapOrientation === 'vertical'}
-      class:horizontal={mapOrientation === 'horizontal'}
-      style="
-        --aspect-ratio: {aspectRatio};
-        --portrait-max-height: {portraitVerticalMaxHeight};
-        --landscape-max-width: {landscapeHorizontalMaxWidth};
-        --landscape-vertical-height: {landscapeVerticalHeight};
-      "
-    >
-      <div class="image-viewer"><!-- image viewer-->
-        {#key activeView?.id}
-          {#if tileSource}
-            <OpenSeadragonViewer {tileSource} {crop} />
-          {/if}
-        {/key}
-      </div>
 
-      <div class="detail-thms">
-        <ul><!-- detail thumbnails -->
-          {#each mapset.views as view}
-            <li class:active={activeView === view}>
-              <button
-                onclick={() => selectView(view)}>
-                {view.caption || `View ${view.ordinal}`}
-              </button>
-            </li>
-          {/each}
-        </ul>
-      </div>
-    </div>
-
-    <div class="text-area">
-      <h2>This is the subhead</h2>
-        {@html activeView.interpretive_text}
-    </div>
+  <div class="map-headers">
+    <h1><a href="#/">Maps of Maine</a></h1>
+    <h2>{mapset.title}</h2>
   </div>
+
+  <div
+    class="image-area"
+    class:vertical={mapOrientation === 'vertical'}
+    class:horizontal={mapOrientation === 'horizontal'}
+    style="
+      --aspect-ratio: {aspectRatio};
+      --portrait-max-height: {portraitVerticalMaxHeight};
+      --portrait-max-width: {portraitHorizontalMaxWidth};
+      --landscape-vertical-height: {landscapeVerticalMaxHeight};
+      --landscape-max-width: {landscapeHorizontalMaxWidth};
+    "
+  >
+    {#key activeView?.id}
+      {#if tileSource}
+        <OpenSeadragonViewer {tileSource} {crop} />
+      {/if}
+    {/key}
+  </div>
+
+  <div class="thumbs">
+    <ul>
+      {#each mapset.views as view}
+        <li class:active={activeView === view}>
+          <button onclick={() => selectView(view)}>
+            {view.caption || `View ${view.ordinal}`}
+          </button>
+        </li>
+      {/each}
+    </ul>
+  </div>
+
+  <div class="text-area">
+    {@html activeView.interpretive_text}
+  </div>
+
   {/if}
 </div><!-- /map-page -->
 
 <style>
-  /* Portrait (default): stacked layout */
-  .map-layout {
-    display: flex;
-    flex-direction: column;
+  /* ── Portrait (default): single-column grid ── */
+  .map-page {
+    display: grid;
+    grid-template-areas:
+      "headers"
+      "viewer"
+      "thumbs"
+      "text";
+    grid-template-rows: 6vh auto auto minmax(0, 24vh);
   }
 
-  .image-area {
-    aspect-ratio: var(--aspect-ratio);
-    display: flex;
-    flex-direction: column;
-  }
+  .map-headers { grid-area: headers; }
+  .image-area  { grid-area: viewer; aspect-ratio: var(--aspect-ratio); background-color: beige; }
+  .thumbs      { grid-area: thumbs; }
+  .text-area   { grid-area: text; overflow-y: auto; }
 
-  /* Portrait + vertical: set definite height so aspect-ratio can derive width */
+  /* Portrait + vertical: constrain height, derive width from aspect-ratio */
   .image-area.vertical {
     height: var(--portrait-max-height);
     width: auto;
-    align-self: flex-start;
+    align-self: start;
+    justify-self: start;
   }
 
-  /* Portrait + horizontal: full width */
+  /* Portrait + horizontal: constrain width, derive height from aspect-ratio */
   .image-area.horizontal {
-    width: 100%;
+    width: var(--portrait-max-width);
+    height: auto;
   }
 
-  /* OSD viewer fills image-area minus thumbnails */
-  .image-viewer {
-    flex: 1;
-    min-height: 0;
-    background-color: beige; /* dev aid */
-  }
-
-  /* Landscape: side-by-side */
+  /* ── Landscape: two-column grid, full viewport height ── */
   @media (orientation: landscape) {
-    .map-layout {
-      flex-direction: row;
-      align-items: flex-start;
+    .map-page {
+      height: 100vh;
+      overflow: hidden;
+      grid-template-columns: 60vw 40vw;
+      grid-template-rows: auto 1fr var(--thumbnail-height-landscape, 8vh);
+      grid-template-areas:
+        "viewer  headers"
+        "viewer  text"
+        "thumbs  text";
     }
 
-    /* Vertical map: fixed height, width from aspect-ratio */
-    .image-area.vertical {
-      max-height: none;
-      height: var(--landscape-vertical-height);
+    /* Let the grid control viewer dimensions; OSD fills the container */
+    .image-area,
+    .image-area.vertical,
+    .image-area.horizontal {
+      aspect-ratio: unset;
+      align-self: stretch;
+      justify-self: stretch;
+      height: auto;
       width: auto;
     }
 
-    /* Horizontal map: definite width so aspect-ratio can derive height */
-    .image-area.horizontal {
-      width: var(--landscape-max-width);
+    .thumbs {
+      align-self: start;
     }
 
     .text-area {
-      flex: 1;
-      height: auto;
       overflow-y: auto;
     }
   }
