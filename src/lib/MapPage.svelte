@@ -146,7 +146,7 @@
   @media (orientation: landscape) {
     .map-page {
       height: 95vh;
-      grid-template-columns: 60vw 35vw;
+      grid-template-columns: 50vw 45vw;
       grid-column-gap: 1vw;
       grid-template-rows: auto 1fr var(--thumbnail-height-landscape, 8vh);
       grid-template-areas:
@@ -155,15 +155,17 @@
         "thumbs  .";
     }
 
-    /* Let the grid control viewer dimensions; OSD fills the container */
+    /* Size viewer by aspect ratio, constrained to available space */
     .image-area,
     .image-area.vertical,
     .image-area.horizontal {
-      aspect-ratio: unset;
-      align-self: stretch;
-      justify-self: stretch;
-      height: auto;
+      aspect-ratio: var(--aspect-ratio);
+      max-width: 50vw;
+      max-height: 90vh;
       width: auto;
+      height: auto;
+      align-self: start;
+      justify-self: start;
     }
 
     .thumbs {
