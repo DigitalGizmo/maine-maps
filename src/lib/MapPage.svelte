@@ -145,14 +145,14 @@
   /* ── Landscape: two-column grid, full viewport height ── */
   @media (orientation: landscape) {
     .map-page {
-      height: 100vh;
-      overflow: hidden;
-      grid-template-columns: 60vw 40vw;
+      height: 95vh;
+      grid-template-columns: 60vw 35vw;
+      grid-column-gap: 1vw;
       grid-template-rows: auto 1fr var(--thumbnail-height-landscape, 8vh);
       grid-template-areas:
         "viewer  headers"
         "viewer  text"
-        "thumbs  text";
+        "thumbs  .";
     }
 
     /* Let the grid control viewer dimensions; OSD fills the container */
