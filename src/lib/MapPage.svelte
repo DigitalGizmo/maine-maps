@@ -60,18 +60,13 @@
   });
 </script>
 
-<div class="map-page" style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
+<div class="map-page" class:horizontal={mapOrientation === 'horizontal'} style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
   {:else if !mapset}
     <p>Loading...</p>
   {:else}
-
-  <div class="map-headers">
-    <h1><a href="#/">Maps of Maine</a></h1>
-    <h2>{mapset.title}</h2>
-  </div>
 
   <div
     class="image-area"
@@ -104,8 +99,15 @@
     </ul>
   </div>
 
-  <div class="text-area">
-    {@html activeView.interpretive_text}
+  <div class="map-right">
+    <div class="map-headers">
+      <h1><a href="#/">Maps of Maine</a></h1>
+      <h2>{mapset.title}</h2>
+    </div>
+
+    <div class="text-area">
+      {@html activeView.interpretive_text}
+    </div>
   </div>
 
   {/if}
@@ -123,6 +125,9 @@
     grid-template-rows: 6vh auto auto minmax(0, 24vh);
   }
 
+  /* display:contents makes .map-right invisible to the grid;
+     its children participate directly with their own grid-area assignments */
+  .map-right   { display: contents; }
   .map-headers { grid-area: headers; }
   .image-area  { grid-area: viewer; aspect-ratio: var(--aspect-ratio); background-color: beige; }
   .thumbs      { grid-area: thumbs; }
@@ -171,6 +176,27 @@
       height: auto;
       align-self: start;
       justify-self: start;
+    }
+
+    /* Horizontal map: single right panel so headers+text flow together */
+    .map-page.horizontal {
+      grid-template-rows: auto auto 1fr;
+      grid-template-areas:
+        "viewer  panel"
+        "thumbs  panel"
+        ".       panel";
+    }
+
+    .map-page.horizontal .map-right {
+      display: flex;
+      flex-direction: column;
+      grid-area: panel;
+      overflow: hidden;
+    }
+
+    .map-page.horizontal .map-right .text-area {
+      flex: 1;
+      overflow-y: auto;
     }
 
     .thumbs {
