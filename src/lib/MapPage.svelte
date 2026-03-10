@@ -155,14 +155,19 @@
         "thumbs  .";
     }
 
-    /* Size viewer by aspect ratio, constrained to available space */
-    .image-area,
-    .image-area.vertical,
+    /* Portrait map: pin height, derive width from aspect ratio */
+    .image-area.vertical {
+      aspect-ratio: var(--aspect-ratio);
+      height: 90vh;
+      width: auto;
+      align-self: start;
+      justify-self: start;
+    }
+
+    /* Landscape map: pin width to column, derive height from aspect ratio */
     .image-area.horizontal {
       aspect-ratio: var(--aspect-ratio);
-      max-width: 50vw;
-      max-height: 90vh;
-      width: auto;
+      width: 50vw;
       height: auto;
       align-self: start;
       justify-self: start;
