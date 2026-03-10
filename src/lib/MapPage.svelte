@@ -160,10 +160,11 @@
         "thumbs  .";
     }
 
-    /* Portrait map: pin height, derive width from aspect ratio */
+    /* Portrait map: pin height, derive width from aspect ratio.
+       Must fit within 95vh grid minus the thumbs row (default 8vh). */
     .image-area.vertical {
       aspect-ratio: var(--aspect-ratio);
-      height: 90vh;
+      height: calc(95vh - var(--thumbnail-height-landscape, 8vh) - 2vh);
       width: auto;
       align-self: start;
       justify-self: start;
