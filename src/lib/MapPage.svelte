@@ -60,7 +60,7 @@
   });
 </script>
 
-<div class="map-page" class:horizontal={mapOrientation === 'horizontal'} style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
+<div class="map-page" style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
@@ -152,35 +152,7 @@
     .map-page {
       height: 95vh;
       grid-template-columns: 50vw 45vw;
-      grid-column-gap: 1vw;
-      grid-template-rows: auto 1fr var(--thumbnail-height-landscape, 8vh);
-      grid-template-areas:
-        "viewer  headers"
-        "viewer  text"
-        "thumbs  .";
-    }
-
-    /* Portrait map: pin height, derive width from aspect ratio.
-       Must fit within 95vh grid minus the thumbs row (default 8vh). */
-    .image-area.vertical {
-      aspect-ratio: var(--aspect-ratio);
-      height: calc(95vh - var(--thumbnail-height-landscape, 8vh) - 2vh);
-      width: auto;
-      align-self: start;
-      justify-self: start;
-    }
-
-    /* Landscape map: pin width to column, derive height from aspect ratio */
-    .image-area.horizontal {
-      aspect-ratio: var(--aspect-ratio);
-      width: 50vw;
-      height: auto;
-      align-self: start;
-      justify-self: start;
-    }
-
-    /* Horizontal map: single right panel so headers+text flow together */
-    .map-page.horizontal {
+      column-gap: 1vw;
       grid-template-rows: auto auto 1fr;
       grid-template-areas:
         "viewer  panel"
@@ -188,24 +160,37 @@
         ".       panel";
     }
 
-    .map-page.horizontal .map-right {
+    /* Override display:contents — headers+text become a single flex panel */
+    .map-right {
       display: flex;
       flex-direction: column;
       grid-area: panel;
       overflow: hidden;
     }
 
-    .map-page.horizontal .map-right .text-area {
+    .map-right .text-area {
       flex: 1;
       overflow-y: auto;
     }
 
-    .thumbs {
+    /* Vertical map: pin height, derive width from aspect ratio */
+    .image-area.vertical {
+      height: calc(95vh - var(--thumbnail-height-landscape, 8vh) - 2vh);
+      width: auto;
       align-self: start;
+      justify-self: start;
     }
 
-    .text-area {
-      overflow-y: auto;
+    /* Horizontal map: pin width to column, derive height from aspect ratio */
+    .image-area.horizontal {
+      width: 50vw;
+      height: auto;
+      align-self: start;
+      justify-self: start;
+    }
+
+    .thumbs {
+      align-self: start;
     }
   }
 </style>
