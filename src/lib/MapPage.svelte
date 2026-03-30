@@ -97,13 +97,19 @@
         </li>
       {/each}
     </ul>
+    <p>
+      A Prospect of the Most Famous Parts of the World<br>
+      Placeholder! London, England<br>
+      Cartographer: John Speed (1542-1629)<br>
+      Engraver: Francis Lamb (active 1667-1701)<br>
+    </p>
   </div>
 
   <div class="map-right">
     <div class="map-headers">
       <h1><a href="#/">Maps of Maine</a></h1>
-      <h2>(mapset.date goes here){mapset.title}</h2>
-      <h3>(mapview.title goes here)</h3>
+      <h2>{mapset.date}: {mapset.title}</h2>
+      <h3>{activeView.title}</h3>
     </div>
 
     <div class="text-area">
