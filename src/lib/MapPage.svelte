@@ -102,7 +102,8 @@
   <div class="map-right">
     <div class="map-headers">
       <h1><a href="#/">Maps of Maine</a></h1>
-      <h2>{mapset.title}</h2>
+      <h2>(mapset.date goes here){mapset.title}</h2>
+      <h3>(mapview.title goes here)</h3>
     </div>
 
     <div class="text-area">
