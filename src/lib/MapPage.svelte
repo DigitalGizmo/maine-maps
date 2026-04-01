@@ -97,12 +97,7 @@
         </li>
       {/each}
     </ul>
-    <p>
-      A Prospect of the Most Famous Parts of the World<br>
-      Placeholder! London, England<br>
-      Cartographer: John Speed (1542-1629)<br>
-      Engraver: Francis Lamb (active 1667-1701)<br>
-    </p>
+    {@html mapset.credit}
   </div>
 
   <div class="map-right">
