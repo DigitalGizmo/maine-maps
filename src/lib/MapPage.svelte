@@ -11,13 +11,17 @@
   let thumbnailHeightLandscape    = '8vh';
 
   const API_BASE = import.meta.env.VITE_API_BASE;
-  const TILES_BASE = 'https://assets.digitalgizmo.com/maine-maps/tiles';
+  const TILES_BASE = import.meta.env.VITE_TILES_BASE;
 
   let mapset = $state(null);
   let mapOrientation = $derived(mapset?.map_orientation ?? 'vertical');
   let aspectRatio = $derived(mapset?.aspect_ratio ?? '3/5');
   let activeView = $state(null);
   let error = $state(null);
+  let allSlugs = $state([]);
+  let currentIndex = $derived(allSlugs.indexOf(slug));
+  let prevSlug = $derived(currentIndex > 0 ? allSlugs[currentIndex - 1] : null);
+  let nextSlug = $derived(currentIndex !== -1 && currentIndex < allSlugs.length - 1 ? allSlugs[currentIndex + 1] : null);
 
   function buildTileSource(view) {
     return {
@@ -50,13 +54,30 @@
 
   onMount(async () => {
     try {
-      const res = await fetch(`${API_BASE}/maps/${slug}/`);
-      if (!res.ok) throw new Error(`API error: ${res.status}`);
-      mapset = await res.json();
-      activeView = mapset.views.find(v => v.ordinal === 1);
+      const listRes = await fetch(`${API_BASE}/maps/`);
+      const list = await listRes.json();
+      allSlugs = list.map(m => m.slug);
     } catch (e) {
-      error = e.message;
+      // allSlugs stays empty; prev/next won't show
     }
+  });
+
+  $effect(() => {
+    const currentSlug = slug;
+    mapset = null;
+    activeView = null;
+    error = null;
+    (async () => {
+      try {
+        const res = await fetch(`${API_BASE}/maps/${currentSlug}/`);
+        if (!res.ok) throw new Error(`API error: ${res.status}`);
+        const data = await res.json();
+        mapset = data;
+        activeView = data.views.find(v => v.ordinal === 1);
+      } catch (e) {
+        error = e.message;
+      }
+    })();
   });
 </script>
 
@@ -90,7 +111,7 @@
   <div class="thumbs">
     <ul>
       {#each mapset.views as view}
-        <li class:active={activeView === view}>
+        <li class:active={activeView?.id === view.id}>
           <button onclick={() => selectView(view)}>
             {view.caption || `View ${view.ordinal}`}
           </button>
@@ -102,7 +123,11 @@
 
   <div class="map-right">
     <div class="map-headers">
-      <h1><a href="#/">Maps of Maine</a></h1>
+      <h1>
+        {#if prevSlug}<a href="#/map/{prevSlug}">&lt;</a>{:else}<span>&lt;</span>{/if}
+        <a href="#/">Maps of Maine</a>
+        {#if nextSlug}<a href="#/map/{nextSlug}">&gt;</a>{:else}<span>&gt;</span>{/if}
+      </h1>
       <h2>{mapset.date}: {mapset.title}</h2>
       <h3>{activeView.title}</h3>
     </div>
