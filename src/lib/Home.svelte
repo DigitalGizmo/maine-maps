@@ -29,7 +29,7 @@
       <ul>
         {#each mapSets as map}
           <li>
-            <a href="#/map/{map.slug}">{map.title}</a>
+            <a href="#/map/{map.slug}">{map.date}: {map.title}</a>
             {#if map.short_description}
               <p class="description">{map.short_description}</p>
             {/if}
