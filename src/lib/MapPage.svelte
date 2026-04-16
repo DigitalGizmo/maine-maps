@@ -113,7 +113,7 @@
       {#each mapset.views as view}
         <li class:active={activeView?.id === view.id}>
           <button onclick={() => selectView(view)}>
-            {view.caption || `View ${view.ordinal}`}
+            {view.title || `View ${view.ordinal}`}
           </button>
         </li>
       {/each}

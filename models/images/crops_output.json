@@ -1,0 +1,16 @@
+[
+  {
+    "color": "red",
+    "crop_x": 53,
+    "crop_y": 233,
+    "crop_width": 324,
+    "crop_height": 185
+  },
+  {
+    "color": "blue",
+    "crop_x": 700,
+    "crop_y": 146,
+    "crop_width": 308,
+    "crop_height": 181
+  }
+]
