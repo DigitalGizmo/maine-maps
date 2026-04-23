@@ -52,6 +52,23 @@
     activeView = view;
   }
 
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  function handleTouchStart(e) {
+    touchStartX = e.changedTouches[0].clientX;
+    touchStartY = e.changedTouches[0].clientY;
+  }
+
+  function handleTouchEnd(e) {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > 80 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx < 0 && nextSlug) window.location.hash = `#/map/${nextSlug}`;
+      else if (dx > 0 && prevSlug) window.location.hash = `#/map/${prevSlug}`;
+    }
+  }
+
   onMount(async () => {
     try {
       const listRes = await fetch(`${API_BASE}/maps/`);
@@ -81,7 +98,13 @@
   });
 </script>
 
-<div class="map-page" style="--thumbnail-height-landscape: {thumbnailHeightLandscape};">
+<div class="map-page"
+  role="region"
+  aria-label="Map viewer"
+  style="--thumbnail-height-landscape: {thumbnailHeightLandscape};"
+  ontouchstart={handleTouchStart}
+  ontouchend={handleTouchEnd}
+>
 
   {#if error}
     <p class="error">Failed to load map: {error}</p>
