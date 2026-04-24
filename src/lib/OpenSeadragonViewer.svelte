@@ -33,6 +33,7 @@
       maxZoomPixelRatio: 2,
       visibilityRatio: 1,
       constrainDuringPan: true,
+      minZoomImageRatio: 1,
     });
 
     viewer.addHandler('open', () => {
