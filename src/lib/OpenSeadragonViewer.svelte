@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import OpenSeadragon from 'openseadragon';
 
-  let { tileSource, crop = null } = $props();
+  let { tileSource, crop = null, onOpen = null } = $props();
 
   let container;
   let viewer;
@@ -31,12 +31,13 @@
       prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@5/build/openseadragon/images/',
       showNavigationControl: true,
       maxZoomPixelRatio: 2,
+      visibilityRatio: 1,
+      constrainDuringPan: true,
     });
 
     viewer.addHandler('open', () => {
-      if (crop) {
-        applyCrop();
-      }
+      if (crop) applyCrop();
+      onOpen?.();
     });
   });
 

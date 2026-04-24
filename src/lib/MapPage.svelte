@@ -48,6 +48,15 @@
     imageWidth: activeView.image_width,
   } : null);
 
+  let osdReady = $state(false);
+
+  function onOpen() { osdReady = true; }
+
+  $effect(() => {
+    activeView; // reset whenever activeView changes
+    osdReady = false;
+  });
+
   function selectView(view) {
     activeView = view;
   }
@@ -116,6 +125,9 @@
     class="image-area"
     class:vertical={mapOrientation === 'vertical'}
     class:horizontal={mapOrientation === 'horizontal'}
+    role="application"
+    ontouchstart={(e) => e.stopPropagation()}
+    ontouchend={(e) => e.stopPropagation()}
     style="
       --aspect-ratio: {aspectRatio};
       --portrait-max-height: {portraitVerticalMaxHeight};
@@ -124,11 +136,11 @@
       --landscape-max-width: {landscapeHorizontalMaxWidth};
     "
   >
-    {#key activeView?.id}
-      {#if tileSource}
-        <OpenSeadragonViewer {tileSource} {crop} />
-      {/if}
-    {/key}
+    {#if tileSource}
+      <div class="viewer-fade" class:ready={osdReady}>
+        <OpenSeadragonViewer {tileSource} {crop} {onOpen} />
+      </div>
+    {/if}
   </div>
 
   <div class="thumbs">
@@ -145,7 +157,7 @@
   </div>
 
   <div class="map-right">
-    <div class="map-headers">
+    <div class="map-headers" class:ready={osdReady}>
       <h1>
         {#if prevSlug}<a href="#/map/{prevSlug}">&lt;</a>{:else}<span>&lt;</span>{/if}
         <a href="#/">Maps of Maine</a>
@@ -155,7 +167,7 @@
       <h3>{activeView.title}</h3>
     </div>
 
-    <div class="text-area">
+    <div class="text-area" class:ready={osdReady}>
       {@html activeView.interpretive_text}
     </div>
   </div>
@@ -178,10 +190,16 @@
   /* display:contents makes .map-right invisible to the grid;
      its children participate directly with their own grid-area assignments */
   .map-right   { display: contents; }
-  .map-headers { grid-area: headers; }
-  .image-area  { grid-area: viewer; aspect-ratio: var(--aspect-ratio); background-color: beige; }
+  .map-headers { grid-area: headers; opacity: 0; transition: opacity 0.75s ease; }
+  .map-headers.ready { opacity: 1; }
+  .image-area  { grid-area: viewer; aspect-ratio: var(--aspect-ratio); background-color: beige; position: relative; }
+  .viewer-fade { position: absolute; inset: 0; opacity: 0; transition: opacity 0.75s ease; }
+  .viewer-fade.ready { opacity: 1; }
   .thumbs      { grid-area: thumbs; }
-  .text-area   { grid-area: text; overflow-y: auto; }
+  .text-area   { grid-area: text; overflow-y: auto; opacity: 0; transition: opacity 0.75s ease; }
+  .text-area.ready { opacity: 1; }
+  .map-headers { grid-area: headers; opacity: 0; transition: opacity 0.75s ease; }
+  .map-headers.ready { opacity: 1; }
 
   /* Portrait + vertical: constrain height, derive width from aspect-ratio */
   .image-area.vertical {
