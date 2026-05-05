@@ -209,7 +209,7 @@
   .site-header {
     grid-area: header;
     display: flex;
-    align-items: stretch;
+    align-items: flex-start;
     gap: 8vw;
   }
 
@@ -219,10 +219,11 @@
     gap: 0.5em;
     background: #015F82;
     color: white;
-    padding: 0 1.25em;
+    padding: 1rem 2em 1rem 1.25em;
     flex: 1;
     font-size: 1.5rem;
     font-weight: 600;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
   }
 
   .site-nav a {
@@ -241,15 +242,16 @@
     justify-content: space-between;
     background: #EC8923;
     color: white;
-    padding: 0 1.25em;
+    padding: 1rem 2em;
     flex: 1;
     min-width: 0;
+    clip-path: polygon(24px 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
   }
 
   .map-nav a {
     color: white;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 400;
   }
 
@@ -393,12 +395,11 @@
 
     /* Header children become direct grid items */
     .site-header { display: contents; }
-    .site-nav { grid-area: sitenav; flex: unset; width: 560px; justify-self: start; }
-    .map-nav  { grid-area: mapnav; }
+    .site-nav { grid-area: sitenav; flex: unset; width: 37vw; justify-self: start; align-self: start; }
+    .map-nav  { grid-area: mapnav; align-self: start; }
 
     .viewer-panel {
       overflow: hidden;
-      align-items: center;
     }
 
     /* Landscape + vertical: thumbnails to the right of the image */
