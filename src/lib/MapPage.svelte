@@ -7,7 +7,6 @@
   let portraitVerticalMaxHeight   = '70vh';
   let portraitHorizontalMaxWidth  = '90vw';
   let landscapeVerticalMaxHeight  = '90vh';
-  let landscapeHorizontalMaxWidth = '50vw';
   let thumbnailHeightLandscape    = '8vh';
 
   const API_BASE = import.meta.env.VITE_API_BASE;
@@ -18,10 +17,13 @@
   let aspectRatio = $derived(mapset?.aspect_ratio ?? '3/5');
   let activeView = $state(null);
   let error = $state(null);
-  let allSlugs = $state([]);
-  let currentIndex = $derived(allSlugs.indexOf(slug));
-  let prevSlug = $derived(currentIndex > 0 ? allSlugs[currentIndex - 1] : null);
-  let nextSlug = $derived(currentIndex !== -1 && currentIndex < allSlugs.length - 1 ? allSlugs[currentIndex + 1] : null);
+
+  let allMaps = $state([]);
+  let currentIndex = $derived(allMaps.findIndex(m => m.slug === slug));
+  let prevMap = $derived(currentIndex > 0 ? allMaps[currentIndex - 1] : null);
+  let nextMap = $derived(currentIndex !== -1 && currentIndex < allMaps.length - 1 ? allMaps[currentIndex + 1] : null);
+  let prevSlug = $derived(prevMap?.slug ?? null);
+  let nextSlug = $derived(nextMap?.slug ?? null);
 
   function buildTileSource(view) {
     return {
@@ -81,10 +83,9 @@
   onMount(async () => {
     try {
       const listRes = await fetch(`${API_BASE}/maps/`);
-      const list = await listRes.json();
-      allSlugs = list.map(m => m.slug);
+      allMaps = await listRes.json();
     } catch (e) {
-      // allSlugs stays empty; prev/next won't show
+      // allMaps stays empty; prev/next won't show
     }
   });
 
@@ -110,7 +111,6 @@
 <div class="map-page"
   role="region"
   aria-label="Map viewer"
-  style="--thumbnail-height-landscape: {thumbnailHeightLandscape};"
   ontouchstart={handleTouchStart}
   ontouchend={handleTouchEnd}
 >
@@ -121,55 +121,73 @@
     <p>Loading...</p>
   {:else}
 
+  <header class="site-header">
+    <div class="site-nav">
+      <span class="hamburger">☰</span>
+      <a href="#/">Maps of Maine</a>
+    </div>
+    <div class="map-nav">
+      {#if prevMap}
+        <a href="#/map/{prevSlug}" class="map-nav-prev">← Previous: {prevMap.date}</a>
+      {:else}
+        <span class="map-nav-prev map-nav-inactive"></span>
+      {/if}
+      <span class="map-nav-current">{mapset.date}</span>
+      {#if nextMap}
+        <a href="#/map/{nextSlug}" class="map-nav-next">Next: {nextMap.date} →</a>
+      {:else}
+        <span class="map-nav-next map-nav-inactive"></span>
+      {/if}
+    </div>
+  </header>
+
   <div
-    class="image-area"
+    class="viewer-panel"
     class:vertical={mapOrientation === 'vertical'}
     class:horizontal={mapOrientation === 'horizontal'}
-    role="application"
-    ontouchstart={(e) => e.stopPropagation()}
-    ontouchend={(e) => e.stopPropagation()}
     style="
       --aspect-ratio: {aspectRatio};
       --portrait-max-height: {portraitVerticalMaxHeight};
       --portrait-max-width: {portraitHorizontalMaxWidth};
       --landscape-vertical-height: {landscapeVerticalMaxHeight};
-      --landscape-max-width: {landscapeHorizontalMaxWidth};
+      --thumbnail-height-landscape: {thumbnailHeightLandscape};
     "
   >
-    {#if tileSource}
-      <div class="viewer-fade" class:ready={osdReady}>
-        <OpenSeadragonViewer {tileSource} {crop} {onOpen} />
-      </div>
+    <div
+      class="image-area"
+      role="application"
+      ontouchstart={(e) => e.stopPropagation()}
+      ontouchend={(e) => e.stopPropagation()}
+    >
+      {#if tileSource}
+        <div class="viewer-fade" class:ready={osdReady}>
+          <OpenSeadragonViewer {tileSource} {crop} {onOpen} />
+        </div>
+      {/if}
+    </div>
+
+    <div class="thumbs">
+      <ul>
+        {#each mapset.views as view}
+          <li class:active={activeView?.id === view.id}>
+            <button onclick={() => selectView(view)} title={view.title || `View ${view.ordinal}`}>
+              <div class="thumb-placeholder"></div>
+            </button>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  </div>
+
+  <div class="text-panel" class:ready={osdReady}>
+    <h2>{mapset.date}: {mapset.title}</h2>
+    {#if mapset.credit}
+      <div class="credit">{@html mapset.credit}</div>
     {/if}
-  </div>
-
-  <div class="thumbs">
-    <ul>
-      {#each mapset.views as view}
-        <li class:active={activeView?.id === view.id}>
-          <button onclick={() => selectView(view)}>
-            {view.title || `View ${view.ordinal}`}
-          </button>
-        </li>
-      {/each}
-    </ul>
-    {@html mapset.credit}
-  </div>
-
-  <div class="map-right">
-    <div class="map-headers" class:ready={osdReady}>
-      <h1>
-        {#if prevSlug}<a href="#/map/{prevSlug}">&lt;</a>{:else}<span>&lt;</span>{/if}
-        <a href="#/">Maps of Maine</a>
-        {#if nextSlug}<a href="#/map/{nextSlug}">&gt;</a>{:else}<span>&gt;</span>{/if}
-      </h1>
-      <h2>{mapset.date}: {mapset.title}</h2>
+    {#if activeView.title}
       <h3>{activeView.title}</h3>
-    </div>
-
-    <div class="text-area" class:ready={osdReady}>
-      {@html activeView.interpretive_text}
-    </div>
+    {/if}
+    <div class="interpretive">{@html activeView.interpretive_text}</div>
   </div>
 
   {/if}
@@ -179,86 +197,240 @@
   /* ── Portrait (default): single-column grid ── */
   .map-page {
     display: grid;
+    padding: 0;
     grid-template-areas:
-      "headers"
+      "header"
       "viewer"
-      "thumbs"
       "text";
-    grid-template-rows: 6vh auto auto minmax(0, 24vh);
+    grid-template-rows: 90px auto minmax(0, 24vh);
   }
 
-  /* display:contents makes .map-right invisible to the grid;
-     its children participate directly with their own grid-area assignments */
-  .map-right   { display: contents; }
-  .map-headers { grid-area: headers; opacity: 0; transition: opacity 0.75s ease; }
-  .map-headers.ready { opacity: 1; }
-  .image-area  { grid-area: viewer; aspect-ratio: var(--aspect-ratio); background-color: beige; position: relative; }
-  .viewer-fade { position: absolute; inset: 0; opacity: 0; transition: opacity 0.75s ease; }
-  .viewer-fade.ready { opacity: 1; }
-  .thumbs      { grid-area: thumbs; }
-  .text-area   { grid-area: text; overflow-y: auto; opacity: 0; transition: opacity 0.75s ease; }
-  .text-area.ready { opacity: 1; }
-  .map-headers { grid-area: headers; opacity: 0; transition: opacity 0.75s ease; }
-  .map-headers.ready { opacity: 1; }
+  /* ── Header ── */
+  .site-header {
+    grid-area: header;
+    display: flex;
+    align-items: stretch;
+    gap: 8vw;
+  }
 
-  /* Portrait + vertical: constrain height, derive width from aspect-ratio */
-  .image-area.vertical {
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    background: #015F82;
+    color: white;
+    padding: 0 1.25em;
+    flex: 1;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .site-nav a {
+    color: white;
+    text-decoration: none;
+  }
+
+  .hamburger {
+    font-size: 1.4rem;
+    cursor: default;
+  }
+
+  .map-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #EC8923;
+    color: white;
+    padding: 0 1.25em;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .map-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .map-nav a:hover {
+    text-decoration: underline;
+  }
+
+  .map-nav-current {
+    font-size: 1.75rem;
+    font-weight: 700;
+  }
+
+  .map-nav-inactive {
+    visibility: hidden;
+    width: 8em;
+  }
+
+  /* ── Viewer panel ── */
+  .viewer-panel {
+    grid-area: viewer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .image-area {
+    aspect-ratio: var(--aspect-ratio);
+    background-color: beige;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .viewer-fade {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.75s ease;
+  }
+
+  .viewer-fade.ready { opacity: 1; }
+
+  /* Portrait + vertical: constrain height */
+  .viewer-panel.vertical .image-area {
     height: var(--portrait-max-height);
     width: auto;
-    align-self: start;
-    justify-self: start;
   }
 
-  /* Portrait + horizontal: constrain width, derive height from aspect-ratio */
-  .image-area.horizontal {
+  /* Portrait + horizontal: constrain width */
+  .viewer-panel.horizontal .image-area {
     width: var(--portrait-max-width);
     height: auto;
   }
 
-  /* ── Landscape: two-column grid, full viewport height ── */
+  /* ── Thumbnails ── */
+  .thumbs ul {
+    list-style: none;
+    padding: 0;
+    margin: 0.5em 0 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+  }
+
+  .thumbs ul li {
+    width: 90px;
+    height: 90px;
+    background-color: #444;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+  }
+
+  .thumbs ul li.active {
+    border-color: #EC8923;
+  }
+
+  .thumbs button {
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+  }
+
+  .thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #555;
+  }
+
+  /* ── Text panel ── */
+  .text-panel {
+    grid-area: text;
+    overflow-y: auto;
+    padding: 0.75em 0;
+    opacity: 0;
+    transition: opacity 0.75s ease;
+  }
+
+  .text-panel.ready { opacity: 1; }
+
+  .text-panel h2 {
+    font-size: 2.25rem;
+    font-weight: 600;
+    margin: 0 0 0.25em;
+    line-height: 1.1;
+  }
+
+  .credit {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #ccc;
+    margin-bottom: 1em;
+    line-height: 1.4;
+  }
+
+  .text-panel h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0.5em 0 0.25em;
+  }
+
+  .interpretive {
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  /* ── Landscape: two-column grid ── */
   @media (orientation: landscape) {
     .map-page {
-      height: 95vh;
-      grid-template-columns: 50vw 45vw;
-      column-gap: 1vw;
-      grid-template-rows: auto auto 1fr;
-      grid-template-areas:
-        "viewer  panel"
-        "thumbs  panel"
-        ".       panel";
-    }
-
-    /* Override display:contents — headers+text become a single flex panel */
-    .map-right {
-      display: flex;
-      flex-direction: column;
-      grid-area: panel;
+      height: 100vh;
       overflow: hidden;
+      grid-template-areas:
+        "sitenav mapnav"
+        "viewer  text";
+      grid-template-columns: 60vw 37vw;
+      grid-template-rows: 90px 1fr;
+      column-gap: 3vw;
     }
 
-    .map-right .text-area {
-      flex: 1;
-      overflow-y: auto;
+    /* Header children become direct grid items */
+    .site-header { display: contents; }
+    .site-nav { grid-area: sitenav; flex: unset; width: 560px; justify-self: start; }
+    .map-nav  { grid-area: mapnav; }
+
+    .viewer-panel {
+      overflow: hidden;
+      align-items: center;
     }
 
-    /* Vertical map: pin height, derive width from aspect ratio */
-    .image-area.vertical {
-      height: calc(95vh - var(--thumbnail-height-landscape, 8vh) - 2vh);
+    /* Landscape + vertical: thumbnails to the right of the image */
+    .viewer-panel.vertical {
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .viewer-panel.vertical .image-area {
+      height: var(--landscape-vertical-height);
       width: auto;
-      align-self: start;
-      justify-self: start;
+      flex-shrink: 0;
     }
 
-    /* Horizontal map: pin width to column, derive height from aspect ratio */
-    .image-area.horizontal {
-      width: 50vw;
+    .viewer-panel.vertical .thumbs {
+      padding-left: 0.5em;
+    }
+
+    .viewer-panel.vertical .thumbs ul {
+      flex-direction: column;
+      margin: 0;
+    }
+
+    /* Landscape + horizontal: full column width, thumbnails below */
+    .viewer-panel.horizontal .image-area {
+      width: 60vw;
       height: auto;
-      align-self: start;
-      justify-self: start;
     }
 
-    .thumbs {
-      align-self: start;
+    .text-panel {
+      overflow-y: auto;
     }
   }
 </style>
