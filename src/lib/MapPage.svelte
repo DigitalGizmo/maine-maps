@@ -170,8 +170,10 @@
       <ul>
         {#each mapset.views as view}
           <li class:active={activeView?.id === view.id}>
-            <button onclick={() => selectView(view)} title={view.title || `View ${view.ordinal}`}>
-              <div class="thumb-placeholder"></div>
+            <button onclick={() => selectView(view)}>
+              <div class="thumb-placeholder">
+                <span class="thumb-label">{view.title || `View ${view.ordinal}`}</span>
+              </div>
             </button>
           </li>
         {/each}
@@ -196,6 +198,7 @@
 <style>
   /* ── Portrait (default): single-column grid ── */
   .map-page {
+    --left-margin: 2em;
     display: grid;
     padding: 0;
     grid-template-areas:
@@ -275,6 +278,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding-left: var(--left-margin);
   }
 
   .image-area {
@@ -312,7 +316,7 @@
     margin: 0.5em 0 0;
     display: flex;
     flex-direction: row;
-    gap: 0.5em;
+    gap: 1px;
   }
 
   .thumbs ul li {
@@ -341,13 +345,24 @@
     width: 100%;
     height: 100%;
     background-color: #555;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .thumb-label {
+    color: yellow;
+    font-size: 0.75rem;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0.25em;
   }
 
   /* ── Text panel ── */
   .text-panel {
     grid-area: text;
     overflow-y: auto;
-    padding: 0.75em 0;
+    padding: 0.75em 0 0.75em var(--left-margin);
     opacity: 0;
     transition: opacity 0.75s ease;
   }
