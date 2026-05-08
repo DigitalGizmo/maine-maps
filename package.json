@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "dev:local": "vite --mode localdev",
+    "dev:kiosk": "vite --mode kiosk",
     "build": "vite build",
+    "build:kiosk": "vite build --mode kiosk",
     "preview": "vite preview"
   },
   "devDependencies": {
