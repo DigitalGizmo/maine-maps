@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import OpenSeadragonViewer from './OpenSeadragonViewer.svelte';
+  import HamburgerMenu from './HamburgerMenu.svelte';
 
   let { slug } = $props();
 
@@ -123,7 +124,7 @@
 
   <header class="site-header">
     <div class="site-nav">
-      <span class="hamburger">☰</span>
+      <HamburgerMenu maps={allMaps} />
       <a href="#/">Maps of Maine</a>
     </div>
     <div class="map-nav">
@@ -232,11 +233,6 @@
   .site-nav a {
     color: white;
     text-decoration: none;
-  }
-
-  .hamburger {
-    font-size: 1.4rem;
-    cursor: default;
   }
 
   .map-nav {
