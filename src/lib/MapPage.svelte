@@ -275,7 +275,6 @@
     flex-direction: column;
     align-items: flex-start;
     padding-left: 1em;
-    padding-left: var(--left-margin);
   }
 
   .image-area {
@@ -359,7 +358,7 @@
   .text-panel {
     grid-area: text;
     overflow-y: auto;
-    padding: 0.75em 1em 0.75em var(--left-margin);
+    padding: 0.75em 1em 0.75em 1em;
     opacity: 0;
     transition: opacity 0.75s ease;
   }
