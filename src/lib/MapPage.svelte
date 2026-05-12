@@ -279,7 +279,7 @@
 
   .image-area {
     aspect-ratio: var(--aspect-ratio);
-    background-color: beige;
+    background-color: #202020;
     position: relative;
     overflow: hidden;
   }
@@ -392,7 +392,7 @@
   }
 
   /* ── Landscape: two-column grid ── */
-  @media (orientation: landscape) {
+  @media (min-aspect-ratio: 9/7) {
     .map-page {
       height: 100vh;
       overflow: hidden;

@@ -1,5 +1,5 @@
 <script>
-  import HamburgerMenu from './HamburgerMenu.svelte';
+  // import HamburgerMenu from './HamburgerMenu.svelte';
 
   const API_BASE = import.meta.env.VITE_API_BASE;
   const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/home';
@@ -22,7 +22,7 @@
 
 <header>
   <div class="banner-slant-right">
-    <HamburgerMenu maps={mapSets} />
+    <!-- <HamburgerMenu maps={mapSets} /> -->
     <h1>Mapping Maine</h1>
     <h2>Explore this place we call Maine and learn how the land's use has changed over time.</h2>
   </div>
