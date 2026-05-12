@@ -199,7 +199,6 @@
 <style>
   /* ── Portrait (default): single-column grid ── */
   .map-page {
-    --left-margin: 2em;
     display: grid;
     padding: 0;
     grid-template-areas:

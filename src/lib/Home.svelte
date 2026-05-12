@@ -54,7 +54,7 @@
 
 <style>
   header {
-    height: 90px;
+    height: 100px;
   }
 
   header div.banner-slant-right {
@@ -62,10 +62,11 @@
     padding: 0 1em;
     height: 100px;
     position: relative;
-    width: 400px;
+    max-width: 25vw;
+    min-width: 400px;
     display: flex;
     align-items: center;
-    gap: 0.75em;
+    gap: 1em;
   }
 
   header div.banner-slant-right:before {
@@ -82,12 +83,12 @@
 
   header h1, header h2 {
     margin: 0;
+    line-height: 1.2em;
   }
 
   header h2 {
     font-weight: 200;
     font-size: 1em;
-    line-height: 1.2em;
   }
 
   header p.prompt {

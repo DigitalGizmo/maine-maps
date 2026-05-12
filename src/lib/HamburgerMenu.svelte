@@ -51,7 +51,7 @@
   {#each maps as map}
     <li>
       <a href="#/map/{map.slug}" onclick={close}>
-        {map.date}{map.short_title || map.title ? ' — ' : ''}{map.short_title || map.title}
+        {map.date}{map.short_title || map.title ? ' - ' : ''}{map.short_title || map.title}
       </a>
     </li>
   {/each}
@@ -62,7 +62,7 @@
     background: none;
     border: none;
     color: #EC8923;
-    font-size: 1.75rem;
+    font-size: 3rem;
     cursor: pointer;
     padding: 0;
     line-height: 1;
@@ -71,7 +71,7 @@
   .dropdown {
     position: fixed;
     background: #015f82;
-    border: 1px solid #0a7aab;
+    /* border: 1px solid #0a7aab; */
     list-style: none;
     margin: 0;
     padding: 0.25em 0;
@@ -84,18 +84,22 @@
     display: none;
   }
 
+  .dropdown li {
+    border-bottom: 1px solid #83b7ce;
+  }
+  
   .dropdown li a {
     display: block;
     padding: 0.5em 1em;
-    color: rgb(207, 207, 25);
+    color: #fff;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.25rem;
     font-weight: 400;
     white-space: nowrap;
   }
 
   .dropdown li a:hover {
     background: #0a7aab;
-    color: white;
+    color: rgb(196, 130, 39);
   }
 </style>
