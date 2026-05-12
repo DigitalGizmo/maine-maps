@@ -201,11 +201,12 @@
   .map-page {
     display: grid;
     padding: 0;
+    row-gap: 1rem;
     grid-template-areas:
       "header"
       "viewer"
       "text";
-    grid-template-rows: 90px auto minmax(0, 24vh);
+    grid-template-rows: 70px auto minmax(0, 24vh);
   }
 
   /* ── Header ── */
@@ -273,6 +274,7 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding-left: 1em;
     padding-left: var(--left-margin);
   }
 
@@ -357,7 +359,7 @@
   .text-panel {
     grid-area: text;
     overflow-y: auto;
-    padding: 0.75em 0 0.75em var(--left-margin);
+    padding: 0.75em 1em 0.75em var(--left-margin);
     opacity: 0;
     transition: opacity 0.75s ease;
   }
@@ -399,7 +401,7 @@
         "sitenav mapnav"
         "viewer  text";
       grid-template-columns: 60vw 37vw;
-      grid-template-rows: 90px 1fr;
+      grid-template-rows: 70px 1fr;
       column-gap: 3vw;
     }
 
