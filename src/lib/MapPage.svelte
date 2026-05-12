@@ -212,7 +212,7 @@
   .site-header {
     grid-area: header;
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 8vw;
   }
 
@@ -405,8 +405,8 @@
 
     /* Header children become direct grid items */
     .site-header { display: contents; }
-    .site-nav { grid-area: sitenav; flex: unset; width: 37vw; justify-self: start; align-self: start; }
-    .map-nav  { grid-area: mapnav; align-self: start; }
+    .site-nav { grid-area: sitenav; flex: unset; width: 37vw; justify-self: start; align-self: stretch; }
+    .map-nav  { grid-area: mapnav; align-self: stretch; }
 
     .viewer-panel {
       overflow: hidden;
