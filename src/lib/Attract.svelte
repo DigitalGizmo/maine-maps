@@ -3,8 +3,8 @@
 
   let { onBegin } = $props();
 
-  const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/home';
-  const slugs = ['1936', '1656', '1815', '1839'];
+  const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/attract';
+  const slugs = ['1600', '1656', '1676', '1755','1795', '1798', '1815', '1839','1855', '1900', '1936', '1960', '2026a','2026b'];
 
   let currentIndex = $state(0);
   let intervalId;
@@ -30,8 +30,8 @@
   {/each}
 
   <div class="content">
-    <h1>Maps of Maine</h1>
-    <h2>1600 to the Present</h2>
+    <h1>Mapping Maine</h1>
+    <h2>Explore this place we call Maine and learn how the land's use has changed over time.</h2>
     <div class="prompt">TAP TO BEGIN</div>
   </div>
 </div>
@@ -53,11 +53,11 @@
     height: 100%;
     object-fit: cover;
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 2s ease-in-out;
   }
 
   .bg.active {
-    opacity: 1;
+    opacity: .4;
   }
 
   .content {
@@ -67,7 +67,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    margin: 0 auto;
     gap: 1.5vw;
+    max-width: 60vw;
   }
 
   h1 {
@@ -81,10 +84,10 @@
 
   h2 {
     margin: 0;
-    font-size: 3.3vw;
+    font-size: 2.25vw;
     line-height: 1;
-    font-weight: 600;
-    color: white;
+    font-weight: 400;
+    color: #fff;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   }
 
@@ -93,8 +96,8 @@
     background: #015F82;
     color: white;
     font-family: "gitan-latn", serif;
-    font-size: 3.3vw;
-    font-weight: 600;
+    font-size: 3vw;
+    font-weight: 400;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.6em 2em;

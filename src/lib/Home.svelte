@@ -121,6 +121,10 @@
     margin-right: 3px;
   }
 
+  .main-menu ul li img {
+    width: 100%;
+  }
+
   .main-menu ul li a {
     color: #ffffff;
   }
