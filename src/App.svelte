@@ -7,7 +7,7 @@
   const isKiosk = import.meta.env.VITE_KIOSK === 'true';
   setContext('isKiosk', isKiosk);
 
-  const KIOSK_TIMEOUT = 30_000; // 30 s for testing; raise to ~120_000 for production
+  const KIOSK_TIMEOUT = 120_000; // 30 s for testing; raise to ~120_000 for production
 
   let route = $state({ page: isKiosk ? 'attract' : 'home', slug: null });
   let timeoutId = null;
