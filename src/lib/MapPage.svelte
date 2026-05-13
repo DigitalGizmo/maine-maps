@@ -358,7 +358,7 @@
   .text-panel {
     grid-area: text;
     overflow-y: auto;
-    padding: 0.75em 1em 0.75em 1em;
+    padding: 0 2rem 3rem 0;
     opacity: 0;
     transition: opacity 0.75s ease;
   }
