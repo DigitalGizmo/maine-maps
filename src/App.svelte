@@ -9,11 +9,12 @@
 
   const KIOSK_TIMEOUT = 120_000; // 30 s for testing; raise to ~120_000 for production
 
-  let route = $state({ page: isKiosk ? 'attract' : 'home', slug: null });
-  let timeoutId = null;
+  let route = $state(/** @type {{ page: string, slug: string | null }} */ ({ page: isKiosk ? 'attract' : 'home', slug: null }));
+  let timeoutId = /** @type {number | undefined} */ (undefined);
 
   function goToAttract() {
     route = { page: 'attract', slug: null };
+    history.replaceState(null, '', window.location.pathname);
   }
 
   function resetTimeout() {
