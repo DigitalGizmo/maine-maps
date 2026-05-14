@@ -35,9 +35,18 @@
     }
   }
 
+  // When a hash link is clicked whose href already matches the current hash,
+  // the browser fires no hashchange event. Catch that case and parse manually.
+  /** @param {MouseEvent} e */
+  function handleLinkClick(e) {
+    const a = /** @type {Element | null} */ (e.target)?.closest('a[href^="#"]');
+    if (a && a.getAttribute('href') === window.location.hash) parseHash();
+  }
+
   onMount(() => {
     if (!isKiosk) parseHash();
     window.addEventListener('hashchange', parseHash);
+    window.addEventListener('click', handleLinkClick);
 
     if (isKiosk) {
       window.addEventListener('click', handleUserActivity);
@@ -48,6 +57,7 @@
 
     return () => {
       window.removeEventListener('hashchange', parseHash);
+      window.removeEventListener('click', handleLinkClick);
       if (isKiosk) {
         window.removeEventListener('click', handleUserActivity);
         window.removeEventListener('touchstart', handleUserActivity);
