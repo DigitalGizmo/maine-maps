@@ -391,6 +391,65 @@
     line-height: 1.5;
   }
 
+  /* ── Mobile portrait (phones) ── */
+  @media (max-width: 480px) {
+    .map-page {
+      grid-template-rows: 55px auto auto;
+    }
+
+    /* Prevent grid blowout: items must not expand beyond their track */
+    .site-header,
+    .viewer-panel,
+    .text-panel {
+      min-width: 0;
+    }
+
+    .site-header {
+      gap: 4vw;
+    }
+
+    .site-nav {
+      font-size: 1rem;
+      padding: 0.4rem 1.5em 0.4rem 0.75em;
+    }
+
+    .map-nav {
+      padding: 0.4rem 0.75em;
+    }
+
+    .map-nav a {
+      font-size: 0.75rem;
+    }
+
+    .map-nav-current {
+      font-size: 1.1rem;
+    }
+
+    .viewer-panel {
+      --portrait-max-height: 50vh;
+      padding-left: 0.5em;
+    }
+
+    /* Cap image and thumbs to the viewer-panel width */
+    .image-area {
+      max-width: calc(100vw - 0.5em);
+    }
+
+    .thumbs {
+      max-width: calc(100vw - 0.5em);
+      overflow-x: auto;
+    }
+
+    .text-panel {
+      padding: 0 1rem 3rem 1rem;
+      overflow-wrap: break-word;
+    }
+
+    .text-panel h2 {
+      font-size: 1.5rem;
+    }
+  }
+
   /* ── Landscape: two-column grid ── */
   @media (min-aspect-ratio: 9/7) {
     .map-page {

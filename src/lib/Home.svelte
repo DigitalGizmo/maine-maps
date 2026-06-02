@@ -161,4 +161,50 @@
   .loading {
     padding: 1em;
   }
+
+  /* ── Mobile portrait (phones) ── */
+  @media (max-width: 480px) {
+    header {
+      height: auto;
+    }
+
+    header div.banner-slant-right {
+      min-width: unset;
+      max-width: unset;
+      width: 100%;
+      height: auto;
+      min-height: 60px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.1em;
+      padding: 0.6em 1em;
+      box-sizing: border-box;
+    }
+
+    header div.banner-slant-right:before {
+      display: none;
+    }
+
+    header h1 {
+      font-size: 1.1em;
+    }
+
+    header h2 {
+      font-size: 0.8em;
+    }
+
+    header p.prompt {
+      font-size: 1.1em;
+      padding: 0.5em 1em;
+    }
+
+    .main-menu ul {
+      margin-top: 1vh;
+    }
+
+    .main-menu ul li {
+      width: 72vw;
+      height: 55vh;
+    }
+  }
 </style>
