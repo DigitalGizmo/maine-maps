@@ -125,7 +125,7 @@
   <header class="site-header">
     <div class="site-nav">
       <HamburgerMenu maps={allMaps} />
-      <a href="#/">Maps of Maine</a>
+      <a href="#/">Maping Maine</a>
     </div>
     <div class="map-nav">
       {#if prevMap}
@@ -173,7 +173,7 @@
           <li class:active={activeView?.id === view.id}>
             <button onclick={() => selectView(view)}>
               <div class="thumb-placeholder">
-                <span class="thumb-label">{view.title || `View ${view.ordinal}`}</span>
+                <span class="thumb-label">{view.ordinal === 1 ? 'Full Map' : (view.title || `View ${view.ordinal}`)}</span>
               </div>
             </button>
           </li>
