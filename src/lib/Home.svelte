@@ -6,6 +6,9 @@
 
   let mapSets = $state([]);
   let error = $state(null);
+  let creditsOpen = $state(false);
+
+  function showCredits() { creditsOpen = true; }
 
   async function loadMaps() {
     try {
@@ -20,11 +23,13 @@
   loadMaps();
 </script>
 
+<svelte:window onkeydown={(e) => { if (e.key === 'Escape') creditsOpen = false; }} />
+
 <header>
   <div class="banner-slant-right">
     <!-- <HamburgerMenu maps={mapSets} /> -->
     <h1>Mapping Maine</h1>
-    <h2>Explore this place we call Maine and learn how the land's use has changed over time.</h2>
+    <h2>Explore this place we call Maine and learn how the land's use has changed over time. <a href="/" onclick={(e) => { e.preventDefault(); showCredits(); }}>Credits</a></h2>
   </div>
   <p class="prompt">Tap a map to explore</p>
 </header>
@@ -49,6 +54,29 @@
         </li>
       {/each}
     </ul>
+  </div>
+{/if}
+
+{#if creditsOpen}
+  <div
+    class="modal-overlay"
+    role="presentation"
+    onclick={(e) => { if (e.target === e.currentTarget) creditsOpen = false; }}
+  >
+    <div class="modal-box">
+      <button class="modal-close" onclick={() => creditsOpen = false}>×</button>
+      <h2>Credits</h2>
+      <p>One category of credits</p>
+      <ul>
+        <li>thing one</li>
+        <li>thing two</li>
+      </ul>
+      <p>Another category of credits</p>
+      <ul>
+        <li>other thing one</li>
+        <li>other thing two</li>
+      </ul>
+    </div>
   </div>
 {/if}
 
@@ -160,6 +188,51 @@
 
   .loading {
     padding: 1em;
+  }
+
+  /* ── Credits modal ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  .modal-box {
+    background: #1a1a1a;
+    color: white;
+    padding: 2em;
+    max-width: 600px;
+    width: 90vw;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    border-radius: 4px;
+  }
+
+  .modal-box h2 {
+    margin: 0 0 1em;
+    font-size: 1.75rem;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 0.75em;
+    right: 0.75em;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.25em;
+  }
+
+  .modal-close:hover {
+    color: #EC8923;
   }
 
   /* ── Mobile portrait (phones) ── */
