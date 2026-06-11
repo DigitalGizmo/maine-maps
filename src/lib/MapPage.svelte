@@ -11,7 +11,7 @@
   let thumbnailHeightLandscape    = '8vh';
 
   const API_BASE = import.meta.env.VITE_API_BASE;
-  const TILES_BASE = import.meta.env.VITE_TILES_BASE;
+  const IMAGE_BASE = import.meta.env.VITE_IMAGE_BASE;
 
   let mapset = $state(null);
   let mapOrientation = $derived(mapset?.map_orientation ?? 'vertical');
@@ -30,7 +30,7 @@
     return {
       Image: {
         xmlns: 'http://schemas.microsoft.com/deepzoom/2008',
-        Url: `${TILES_BASE}/${view.filename}_files/`,
+        Url: `${IMAGE_BASE}/tiles/${view.filename}_files/`,
         Format: 'jpeg',
         Overlap: '1',
         TileSize: '512',
@@ -173,6 +173,7 @@
           <li class:active={activeView?.id === view.id}>
             <button onclick={() => selectView(view)}>
               <div class="thumb-placeholder">
+                <img src="{IMAGE_BASE}/thumbs/{slug}_{view.ordinal}.jpg" alt="{view.ordinal === 1 ? 'Full Map' : (view.title || `View ${view.ordinal}`)}" />
                 <span class="thumb-label">{view.ordinal === 1 ? 'Full Map' : (view.title || `View ${view.ordinal}`)}</span>
               </div>
             </button>
@@ -341,17 +342,28 @@
     width: 100%;
     height: 100%;
     background-color: #555;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thumb-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .thumb-label {
-    color:#EC8923;
-    font-size: 0.75rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #EC8923;
+    font-size: 0.65rem;
     text-align: center;
     line-height: 1.2;
-    padding: 0.25em;
+    padding: 0.2em 0.25em;
   }
 
   /* ── Text panel ── */
