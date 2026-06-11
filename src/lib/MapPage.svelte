@@ -125,7 +125,7 @@
   <header class="site-header">
     <div class="site-nav">
       <HamburgerMenu maps={allMaps} />
-      <a href="#/">Maping Maine</a>
+      <a href="#/">Mapping Maine</a>
     </div>
     <div class="map-nav">
       {#if prevMap}
@@ -222,7 +222,7 @@
     align-items: center;
     gap: 0.5em;
     background: #015F82;
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 1rem 2em 1rem 1.25em;
     flex: 1;
     font-size: 1.5rem;
@@ -231,7 +231,7 @@
   }
 
   .site-nav a {
-    color: white;
+    color: rgb(255, 255, 255);
     text-decoration: none;
   }
 
@@ -240,7 +240,7 @@
     align-items: center;
     justify-content: space-between;
     background: #EC8923;
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 1rem 2em;
     flex: 1;
     min-width: 0;
@@ -248,7 +248,7 @@
   }
 
   .map-nav a {
-    color: white;
+    color: rgb(255, 255, 255);
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: 400;
@@ -279,7 +279,7 @@
 
   .image-area {
     aspect-ratio: var(--aspect-ratio);
-    background-color: #202020;
+    background-color: #2c2c2c;
     position: relative;
     overflow: hidden;
   }
@@ -347,7 +347,7 @@
   }
 
   .thumb-label {
-    color: yellow;
+    color:#EC8923;
     font-size: 0.75rem;
     text-align: center;
     line-height: 1.2;

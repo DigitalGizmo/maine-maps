@@ -29,9 +29,10 @@
   <div class="banner-slant-right">
     <!-- <HamburgerMenu maps={mapSets} /> -->
     <h1>Mapping Maine</h1>
-    <h2>Explore this place we call Maine and learn how the land's use has changed over time. <a href="/" onclick={(e) => { e.preventDefault(); showCredits(); }}>Credits</a></h2>
+    <h2>Explore this place we call Maine and learn how the land's use has changed over time.</h2>
+    <p class="credits"><a href="/" onclick={(e) => { e.preventDefault(); showCredits(); }}>Credits</a></p>
   </div>
-  <p class="prompt">Tap a map to explore</p>
+  <p class="prompt">Scroll for more maps. Tap a map to explore.</p>
 </header>
 
 {#if error}
@@ -82,49 +83,59 @@
 
 <style>
   header {
-    height: 100px;
+    height: 120px;
   }
 
   header div.banner-slant-right {
     background-color: #015f82;
-    padding: 0 1em;
-    height: 100px;
+    padding: .25em 1em 0 2em;
+    height: 120px;
     position: relative;
     max-width: 25vw;
     min-width: 400px;
-    display: flex;
-    align-items: center;
-    gap: 1em;
   }
 
   header div.banner-slant-right:before {
     content: "";
     position: absolute;
-    right: -70px;
-    bottom: 0;
-    width: 0;
-    height: 0;
+    right: -69.5px;
+    top: 0;
+    /* bottom: 0; */
+    /* width: 0; */
+    /* height: 0; */
     border-left: 70px solid #015f82;
     border-top: 0px solid transparent;
-    border-bottom: 100px solid transparent;
+    border-bottom: 125px solid transparent;
   }
 
   header h1, header h2 {
+    font-weight: 600;
+    font-size: 2em;
     margin: 0;
-    line-height: 1.2em;
   }
 
   header h2 {
+    margin: 0;
     font-weight: 200;
-    font-size: 1em;
+    font-size: 1.25em;
   }
 
+  header p.credits {
+    margin: 2em 0;
+    padding: 0;
+  }
+
+  header p.credits a {
+    text-transform: uppercase;
+  }
+  
   header p.prompt {
     font-family: myriad-pro-black;
     font-style: italic;
     font-weight: 200;
-    font-size: 1.5em;
+    font-size: 1.75em;
     padding: 1em;
+    text-align: center;
   }
 
   .main-menu {
