@@ -270,8 +270,8 @@
 
   .image-area {
     aspect-ratio: var(--aspect-ratio);
-    /* background-color: #2c2c2c; */
-    background-color: beige;
+    background-color: #2c2c2c;
+    /* background-color: beige; */
     position: relative;
     overflow: hidden;
     height: min(70vh, calc((100vw - 120px) / var(--ar)));

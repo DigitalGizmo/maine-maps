@@ -30,6 +30,7 @@
       tileSources: tileSource,
       prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@5/build/openseadragon/images/',
       showNavigationControl: true,
+      controlsFadeDelay: Infinity,
       maxZoomPixelRatio: 2,
       visibilityRatio: 1,
       constrainDuringPan: true,
@@ -61,3 +62,13 @@
 </script>
 
 <div bind:this={container} style="width: {width}; height: {height};"></div>
+
+<style>
+  :global(.openseadragon-container div[title]) {
+    transform: scale(1.4);
+    transform-origin: top left;
+  }
+  :global(.openseadragon-container div[title] *) {
+    opacity: 0.75 !important;
+  }
+</style>
