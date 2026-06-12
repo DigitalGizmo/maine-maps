@@ -5,17 +5,14 @@
 
   let { slug } = $props();
 
-  let portraitVerticalMaxHeight   = '70vh';
-  let portraitHorizontalMaxWidth  = '90vw';
-  let landscapeVerticalMaxHeight  = '90vh';
-  let thumbnailHeightLandscape    = '8vh';
-
   const API_BASE = import.meta.env.VITE_API_BASE;
   const IMAGE_BASE = import.meta.env.VITE_IMAGE_BASE;
 
   let mapset = $state(null);
-  let mapOrientation = $derived(mapset?.map_orientation ?? 'vertical');
   let aspectRatio = $derived(mapset?.aspect_ratio ?? '3/5');
+  let aspectRatioNum = $derived(
+    Number(aspectRatio.split('/')[0]) / Number(aspectRatio.split('/')[1])
+  );
   let activeView = $state(null);
   let error = $state(null);
 
@@ -144,15 +141,7 @@
 
   <div
     class="viewer-panel"
-    class:vertical={mapOrientation === 'vertical'}
-    class:horizontal={mapOrientation === 'horizontal'}
-    style="
-      --aspect-ratio: {aspectRatio};
-      --portrait-max-height: {portraitVerticalMaxHeight};
-      --portrait-max-width: {portraitHorizontalMaxWidth};
-      --landscape-vertical-height: {landscapeVerticalMaxHeight};
-      --thumbnail-height-landscape: {thumbnailHeightLandscape};
-    "
+    style="--aspect-ratio: {aspectRatio}; --ar: {aspectRatioNum};"
   >
     <div
       class="image-area"
@@ -273,16 +262,20 @@
   .viewer-panel {
     grid-area: viewer;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: flex-start;
+    justify-content: center;
     padding-left: 1em;
   }
 
   .image-area {
     aspect-ratio: var(--aspect-ratio);
-    background-color: #2c2c2c;
+    /* background-color: #2c2c2c; */
+    background-color: beige;
     position: relative;
     overflow: hidden;
+    height: min(70vh, calc((100vw - 120px) / var(--ar)));
+    width: auto;
   }
 
   .viewer-fade {
@@ -294,25 +287,17 @@
 
   .viewer-fade.ready { opacity: 1; }
 
-  /* Portrait + vertical: constrain height */
-  .viewer-panel.vertical .image-area {
-    height: var(--portrait-max-height);
-    width: auto;
-  }
-
-  /* Portrait + horizontal: constrain width */
-  .viewer-panel.horizontal .image-area {
-    width: var(--portrait-max-width);
-    height: auto;
-  }
-
   /* ── Thumbnails ── */
+  .thumbs {
+    padding-left: 0.5em;
+  }
+
   .thumbs ul {
     list-style: none;
     padding: 0;
-    margin: 0.5em 0 0;
+    margin: 0;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1px;
   }
 
@@ -438,18 +423,11 @@
     }
 
     .viewer-panel {
-      --portrait-max-height: 50vh;
       padding-left: 0.5em;
     }
 
-    /* Cap image and thumbs to the viewer-panel width */
     .image-area {
-      max-width: calc(100vw - 0.5em);
-    }
-
-    .thumbs {
-      max-width: calc(100vw - 0.5em);
-      overflow-x: auto;
+      height: min(50vh, calc((100vw - 110px) / var(--ar)));
     }
 
     .text-panel {
@@ -484,32 +462,8 @@
       overflow: hidden;
     }
 
-    /* Landscape + vertical: thumbnails to the right of the image */
-    .viewer-panel.vertical {
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .viewer-panel.vertical .image-area {
-      height: var(--landscape-vertical-height);
-      width: auto;
-      flex-shrink: 0;
-    }
-
-    .viewer-panel.vertical .thumbs {
-      padding-left: 0.5em;
-    }
-
-    .viewer-panel.vertical .thumbs ul {
-      flex-direction: column;
-      margin: 0;
-    }
-
-    /* Landscape + horizontal: full column width, thumbnails below */
-    .viewer-panel.horizontal .image-area {
-      width: 60vw;
-      height: auto;
+    .image-area {
+      height: min(90vh, calc((60vw - 120px) / var(--ar)));
     }
 
     .text-panel {
