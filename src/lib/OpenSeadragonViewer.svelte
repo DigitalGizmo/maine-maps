@@ -7,9 +7,6 @@
   let container;
   let viewer;
 
-  let width = '100%';
-  let height = '100%';
-
   function applyCrop() {
     if (!viewer || !crop) return;
     // Convert pixel coordinates to OSD viewport coordinates.
@@ -61,7 +58,7 @@
   });
 </script>
 
-<div bind:this={container} style="width: {width}; height: {height};"></div>
+<div bind:this={container} style="width: 100%; height: 100%;"></div>
 
 <style>
   :global(.openseadragon-container div[title]) {
