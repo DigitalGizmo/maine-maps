@@ -67,16 +67,70 @@
     <div class="modal-box">
       <button class="modal-close" onclick={() => creditsOpen = false}>×</button>
       <h2>Credits</h2>
-      <p>One category of credits</p>
+      <p>The Maine State Museum is grateful to Jay Clark and Bob Bistrais from the Maine Geospatial Library for their assistance in creating the contemporary wall map and the 2026 digital maps of Maine.</p>
+
+      <p>Educational interactive content planning, design, and development:</p>
+
+      <h3>Maine State Museum</h3>
       <ul>
-        <li>thing one</li>
-        <li>thing two</li>
+        <li>Andrew Beaupre, Curator of Archaeological Collections</li>
+        <li>Angela Goebel-Bain, Curator of Historical Collections</li>
+        <li>Brittany Jaarsma, Curator of Historical Collection</li> 
+        <li>Zachariah Selley, Curator of Archival Collections</li>
+        <li>Kate Webber, Lead Educator</li>
       </ul>
-      <p>Another category of credits</p>
+
+      <h3>Digital Gizmo</h3>
       <ul>
-        <li>other thing one</li>
-        <li>other thing two</li>
+        <li>Don Button, Technical Director</li>
+        <li>Juliet Jacobson, Design Director</li>
       </ul>
+
+      <h3>Individual Map Credits:</h3>
+
+      <div class="indi-maps">
+        <h4>The Barry Lawrence Ruderman Map Collection, courtesy Stanford University Libraries</h4>
+        <ul>
+          <li>Le Canada ou Nouvelle France &c. Ce qui set les plus advance vers le Septenrion est tier de dives Relations des Anglois, Danois &c. . . . 1656</li>
+          <li>Partie Orientale de la Nouvelle France ou du Canada, 1755</li>
+        </ul>
+
+        <h4>Lionel Pincus and Princess Firyal Map Division, The New York Public Library</h4>
+        <ul>
+          <li>Map of New England and New York, 1676</li>
+        </ul>
+
+        <h4>Maine Geospatial Library, Augusta, Maine</h4>
+        <ul>
+          <li>Map of Maine lands held by Wabanaki tribes, 2026</li>
+          <li>Maine Today, 2026</li>
+        </ul>
+
+        <h4>Maine State Museum</h4>
+        <ul>
+          <li>“Greetings From Maine” Postcard, circa 1960</li>
+        </ul>
+        
+        <h4>Musée des Abénakis</h4>
+        <ul>
+          <li>The Ndakina, the W8banaki Nation's Territory, 2023</li>
+        </ul>
+        
+        <h4>Osher Map Library and Smith Center for Cartographic Education, University of Southern Maine</h4>
+        <ul>
+          <li>The Province of Maine, From the best Authorities, 1795</li>
+          <li>Maine Entworfen von D.F. Sotzmann, 1798</li>
+          <li>Maine and the Disputed Territory, 1839</li>
+          <li>Colton's Railroad & Township Map of the State of Maine, 1855</li>
+          <li>Map of the State of Maine Showing Railroads, Towns, Plantations and Wild Lands, 1900</li>
+          <li>State Highway Commission Map of Maine, 1935, reprinted 1936</li>
+        </ul>
+        
+        <h4>Courtesy of M. Carlson Williams</h4>
+        <ul>
+          <li>Map of the District of Maine from the Latest and Best Authorities, 1815</li>
+        </ul>
+      </div>
     </div>
   </div>
 {/if}
@@ -205,7 +259,7 @@
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(33, 33, 33, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -213,8 +267,8 @@
   }
 
   .modal-box {
-    background: #1a1a1a;
-    color: white;
+    background: #ffffff;
+    color: rgb(30, 30, 30);
     padding: 2em;
     max-width: 600px;
     width: 90vw;
@@ -235,7 +289,7 @@
     right: 0.75em;
     background: none;
     border: none;
-    color: white;
+    color: rgb(234, 146, 4);
     font-size: 1.75rem;
     line-height: 1;
     cursor: pointer;
@@ -243,7 +297,11 @@
   }
 
   .modal-close:hover {
-    color: #EC8923;
+    color: #055082;
+  }
+
+  .indi-maps  {
+    font-style: italic;
   }
 
   /* ── Mobile portrait (phones) ── */
