@@ -7,9 +7,14 @@
     "dev": "vite",
     "dev:local": "vite --mode localdev",
     "dev:kiosk": "vite --mode kiosk",
+    "dev:review": "vite --mode review",
     "build": "vite build",
     "build:kiosk": "vite build --mode kiosk",
-    "preview": "vite preview"
+    "build:review": "vite build --mode review",
+    "fetch:data": "mkdir -p public/data && curl -sf https://maine-maps-cms.digitalgizmo.com/api/maps/ -o public/data/maps.json && echo 'wrote public/data/maps.json'",
+    "preview": "vite preview",
+    "preview:kiosk": "vite preview --mode kiosk",
+    "preview:review": "vite preview --mode review"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^6.2.1",

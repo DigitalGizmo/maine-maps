@@ -2,10 +2,10 @@
   import { onMount } from 'svelte';
   import OpenSeadragonViewer from './OpenSeadragonViewer.svelte';
   import HamburgerMenu from './HamburgerMenu.svelte';
+  import { getMaps, getMap } from './mapData.js';
 
   let { slug } = $props();
 
-  const API_BASE = import.meta.env.VITE_API_BASE;
   const IMAGE_BASE = import.meta.env.VITE_IMAGE_BASE;
 
   let mapset = $state(null);
@@ -80,8 +80,7 @@
 
   onMount(async () => {
     try {
-      const listRes = await fetch(`${API_BASE}/maps/`);
-      allMaps = await listRes.json();
+      allMaps = await getMaps();
     } catch (e) {
       // allMaps stays empty; prev/next won't show
     }
@@ -94,9 +93,7 @@
     error = null;
     (async () => {
       try {
-        const res = await fetch(`${API_BASE}/maps/${currentSlug}/`);
-        if (!res.ok) throw new Error(`API error: ${res.status}`);
-        const data = await res.json();
+        const data = await getMap(currentSlug);
         mapset = data;
         activeView = data.views.find(v => v.ordinal === 1);
       } catch (e) {

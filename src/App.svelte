@@ -4,12 +4,12 @@
   import MapPage from './lib/MapPage.svelte';
   import Attract from './lib/Attract.svelte';
 
-  const isKiosk = import.meta.env.VITE_KIOSK === 'true';
-  setContext('isKiosk', isKiosk);
+  const isAttract = import.meta.env.VITE_ATTRACT === 'true';
+  setContext('isAttract', isAttract);
 
-  const KIOSK_TIMEOUT = 120_000; // 30 s for testing; raise to ~120_000 for production
+  const ATTRACT_TIMEOUT = 120_000; // inactivity delay before returning to attract screen
 
-  let route = $state(/** @type {{ page: string, slug: string | null }} */ ({ page: isKiosk ? 'attract' : 'home', slug: null }));
+  let route = $state(/** @type {{ page: string, slug: string | null }} */ ({ page: isAttract ? 'attract' : 'home', slug: null }));
   let timeoutId = /** @type {number | undefined} */ (undefined);
 
   function goToAttract() {
@@ -19,7 +19,7 @@
 
   function resetTimeout() {
     clearTimeout(timeoutId);
-    timeoutId = setTimeout(goToAttract, KIOSK_TIMEOUT);
+    timeoutId = setTimeout(goToAttract, ATTRACT_TIMEOUT);
   }
 
   function handleUserActivity() {
@@ -45,11 +45,11 @@
   }
 
   onMount(() => {
-    if (!isKiosk) parseHash();
+    if (!isAttract) parseHash();
     window.addEventListener('hashchange', parseHash);
     window.addEventListener('click', handleLinkClick);
 
-    if (isKiosk) {
+    if (isAttract) {
       window.addEventListener('click', handleUserActivity);
       window.addEventListener('touchstart', handleUserActivity);
       window.addEventListener('mousemove', handleUserActivity);
@@ -59,7 +59,7 @@
     return () => {
       window.removeEventListener('hashchange', parseHash);
       window.removeEventListener('click', handleLinkClick);
-      if (isKiosk) {
+      if (isAttract) {
         window.removeEventListener('click', handleUserActivity);
         window.removeEventListener('touchstart', handleUserActivity);
         window.removeEventListener('mousemove', handleUserActivity);

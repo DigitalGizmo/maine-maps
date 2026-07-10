@@ -1,7 +1,7 @@
 <script>
   // import HamburgerMenu from './HamburgerMenu.svelte';
+  import { getMaps } from './mapData.js';
 
-  const API_BASE = import.meta.env.VITE_API_BASE;
   const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/home';
 
   let mapSets = $state([]);
@@ -12,9 +12,7 @@
 
   async function loadMaps() {
     try {
-      const res = await fetch(`${API_BASE}/maps/`);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      mapSets = await res.json();
+      mapSets = await getMaps();
     } catch (e) {
       error = e.message;
     }
