@@ -23,4 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 *.jpg
-public/images
+public/images/*
+!public/images/osd-images

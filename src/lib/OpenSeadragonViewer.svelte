@@ -25,7 +25,7 @@
     viewer = OpenSeadragon({
       element: container,
       tileSources: tileSource,
-      prefixUrl: 'https://cdn.jsdelivr.net/npm/openseadragon@5/build/openseadragon/images/',
+      prefixUrl: `${import.meta.env.BASE_URL}images/osd-images/`,
       showNavigationControl: true,
       controlsFadeDelay: Infinity,
       maxZoomPixelRatio: 2,

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KioWare Serving Diagnostic</title>
+<style>
+  body { font-family: Menlo, Consolas, monospace; font-size: 17px; background: #111; color: #eee; padding: 24px; }
+  h1 { font-size: 22px; } h2 { font-size: 18px; margin-top: 28px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 12px; }
+  td, th { border: 1px solid #555; padding: 6px 10px; text-align: left; vertical-align: top; word-break: break-all; }
+  .pass { color: #4caf50; font-weight: bold; }
+  .fail { color: #f44336; font-weight: bold; }
+  .info { color: #ffb300; font-weight: bold; }
+  pre { white-space: pre-wrap; color: #f44336; }
+</style>
+</head>
+<body>
+<h1>Maine Maps &mdash; KioWare Serving Diagnostic</h1>
+<div id="env"></div>
+<table id="results"><tr><th style="width:34%">Test</th><th style="width:8%">Result</th><th>Details</th></tr></table>
+<h2>Page errors</h2>
+<pre id="errors">(none)</pre>
+
+<!-- Deliberately a CLASSIC script: runs even if module scripts are broken -->
+<script>
+(function () {
+  var errBox = document.getElementById('errors');
+  var errCount = 0;
+  window.addEventListener('error', function (e) {
+    errCount++;
+    if (errCount === 1) errBox.textContent = '';
+    errBox.textContent += (e.message || 'resource load error') +
+      (e.filename ? '\n  at ' + e.filename + ':' + e.lineno : '') + '\n';
+  }, true);
+
+  document.getElementById('env').innerHTML =
+    'URL: ' + location.href + '<br>' +
+    'baseURI: ' + document.baseURI + '<br>' +
+    'UA: ' + navigator.userAgent;
+
+  var table = document.getElementById('results');
+  function row(name, status, details) {
+    var tr = document.createElement('tr');
+    var cls = status === 'PASS' ? 'pass' : status === 'FAIL' ? 'fail' : 'info';
+    tr.innerHTML = '<td>' + name + '</td><td class="' + cls + '">' + status +
+      '</td><td>' + details + '</td>';
+    table.appendChild(tr);
+  }
+
+  // Fetch a URL and report status, Content-Type, and byte count.
+  // typeCheck: substring the Content-Type must contain to PASS (or null to skip).
+  function probe(name, url, typeCheck) {
+    return fetch(url, { cache: 'no-store' }).then(function (r) {
+      return r.text().then(function (t) {
+        var ct = r.headers.get('content-type') || '(none)';
+        var ok = r.ok && (!typeCheck || ct.toLowerCase().indexOf(typeCheck) !== -1);
+        row(name, ok ? 'PASS' : 'FAIL',
+          'HTTP ' + r.status + ' &middot; Content-Type: ' + ct + ' &middot; ' + t.length + ' bytes');
+        return { ok: r.ok, ct: ct, text: t };
+      });
+    }).catch(function (err) {
+      row(name, 'FAIL', 'fetch threw: ' + err.message);
+      return null;
+    });
+  }
+
+  // 1. Fetch index.html relative to this page and discover the built asset paths.
+  probe('GET ./index.html', './index.html', 'html').then(function (res) {
+    if (!res || !res.ok) {
+      row('discover asset paths', 'FAIL', 'could not read index.html to find bundle paths');
+      return;
+    }
+    var js = res.text.match(/src="([^"]+\.js)"/);
+    var css = res.text.match(/href="([^"]+\.css)"[^>]*>/);
+    var jsPath = js ? js[1] : null;
+    var cssPath = css ? css[1] : null;
+    if (!jsPath) {
+      row('discover asset paths', 'FAIL', 'no .js src found in index.html');
+      return;
+    }
+    row('discover asset paths', 'PASS', 'js: ' + jsPath + (cssPath ? ' &middot; css: ' + cssPath : ''));
+
+    // 2. Probe the JS bundle BOTH as written in index.html and via the other
+    //    addressing form. If absolute fails but relative passes, KioWare is
+    //    serving the app under a subpath, not at the server root.
+    var file = jsPath.replace(/^.*\//, '');
+    probe('JS bundle, absolute path (/assets/&hellip;)', '/assets/' + file, 'javascript');
+    probe('JS bundle, relative path (./assets/&hellip;)', './assets/' + file, 'javascript');
+    if (cssPath) probe('CSS bundle, relative path', './' + cssPath.replace(/^\//, ''), 'css');
+  });
+
+  // 3. Other file types the app needs.
+  probe('GET ./data/maps.json', './data/maps.json', 'json');
+  probe('GET ./images/home/map1839.jpg', './images/home/map1839.jpg', null);
+
+  // 4. External hosts index.html references (Typekit CSS, jsdelivr OSD icons).
+  //    no-cors: an opaque response means "reachable"; a throw means blocked.
+  function probeExternal(name, url) {
+    fetch(url, { mode: 'no-cors', cache: 'no-store' }).then(function () {
+      row(name, 'PASS', 'reachable');
+    }).catch(function (err) {
+      row(name, 'INFO', 'NOT reachable (' + err.message + ') &mdash; render-blocking Typekit CSS could delay first paint');
+    });
+  }
+  probeExternal('external: use.typekit.net', 'https://use.typekit.net/cqz5vdj.css');
+  probeExternal('external: cdn.jsdelivr.net', 'https://cdn.jsdelivr.net/npm/openseadragon@5/package.json');
+
+  // 5. Dynamic import of a module file (exercises module MIME checking directly).
+  try {
+    import('./diag-module.js').then(function () {
+      row('dynamic import(./diag-module.js)', 'PASS', 'module executed');
+    }).catch(function (err) {
+      row('dynamic import(./diag-module.js)', 'FAIL',
+        err.message + ' &mdash; likely wrong Content-Type on .js (strict module MIME check)');
+    });
+  } catch (e) {
+    row('dynamic import support', 'FAIL', e.message);
+  }
+
+  // 6. The two <script type="module"> tags below set flags; check after they run.
+  setTimeout(function () {
+    row('inline &lt;script type=module&gt;', window.__moduleInlineOk ? 'PASS' : 'FAIL',
+      window.__moduleInlineOk ? 'executed' : 'did not execute &mdash; module scripts unsupported or blocked');
+    row('external &lt;script type=module src&gt;', window.__moduleExternalOk ? 'PASS' : 'FAIL',
+      window.__moduleExternalOk ? 'executed' :
+      'did not execute &mdash; this is exactly how the real app loads; wrong .js Content-Type would cause this');
+  }, 2500);
+})();
+</script>
+
+<script type="module">window.__moduleInlineOk = true;</script>
+<script type="module" src="./diag-module.js"></script>
+</body>
+</html>
