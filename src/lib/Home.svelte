@@ -170,6 +170,7 @@
     margin: 0;
     font-weight: 200;
     font-size: 1.25em;
+    line-height: 1.2em;
   }
 
   header p.credits {
