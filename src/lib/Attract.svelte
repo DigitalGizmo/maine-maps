@@ -3,7 +3,7 @@
 
   let { onBegin } = $props();
 
-  const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/attract';
+  const ASSETS_BASE = `${import.meta.env.VITE_IMAGE_BASE}/attract`;
   const slugs = ['1600', '1656', '1676', '1755','1795', '1798', '1815', '1839','1855', '1900', '1936', '1960', '2026a','2026b'];
 
   let currentIndex = $state(0);

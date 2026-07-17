@@ -1,10 +1,28 @@
+@font-face {
+  font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-Rg.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-Sb.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-Bd.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
 body {
   padding: 0;
   margin: 0;
-  @font-face {
-    font-family: gitan-latin, serif;
-    src: url('assets/fonts/GitanLatnWeb/GitanLatnWeb-Rg.woff2');
-  }
+  font-family: "gitan-latn", serif;
 }
 
 #app {

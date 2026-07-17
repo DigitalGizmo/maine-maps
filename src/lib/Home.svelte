@@ -2,7 +2,7 @@
   // import HamburgerMenu from './HamburgerMenu.svelte';
   import { getMaps } from './mapData.js';
 
-  const ASSETS_BASE = 'https://assets.digitalgizmo.com/maine-maps/home';
+  const ASSETS_BASE = `${import.meta.env.VITE_IMAGE_BASE}/home`;
 
   let mapSets = $state([]);
   let error = $state(null);
