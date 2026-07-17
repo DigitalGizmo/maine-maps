@@ -182,7 +182,7 @@
   }
   
   header p.prompt {
-    font-family: myriad-pro-black;
+    /* font-family: myriad-pro-black; */
     font-style: italic;
     font-weight: 200;
     font-size: 1.75em;
