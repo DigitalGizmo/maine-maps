@@ -7,6 +7,13 @@
 
 @font-face {
   font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-It.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "gitan-latn";
   src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-Sb.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
@@ -14,9 +21,23 @@
 
 @font-face {
   font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-SbIt.woff2') format('woff2');
+  font-weight: 600;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "gitan-latn";
   src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-Bd.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
+}
+
+@font-face {
+  font-family: "gitan-latn";
+  src: url('./assets/fonts/GitanLatnWeb/GitanLatnWeb-BdIt.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
 }
 
 body {
