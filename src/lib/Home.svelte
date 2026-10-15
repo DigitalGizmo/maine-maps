@@ -65,13 +65,13 @@
     <div class="modal-box">
       <button class="modal-close" onclick={() => creditsOpen = false}>×</button>
       <h2>Credits</h2>
-      <p>The Maine State Museum is grateful to Jay Clark and Bob Bistrais from the Maine Geospatial Library for their assistance in creating the contemporary wall map and the 2026 digital maps of Maine.</p>
+      <p>The Maine State Museum is grateful to Jay Clark and Bob Bistrais from the Maine Library of Geographic Information for their assistance in creating the contemporary wall map and the 2026 digital maps of Maine.</p>
 
-      <p>Educational interactive content planning, design, and development:</p>
+      <p>Educational interactive content planning, design, and development</p>
 
       <h3>Maine State Museum</h3>
       <ul>
-        <li>Andrew Beaupre, Curator of Archaeological Collections</li>
+        <li>Andrew Beaupré, Curator of Archaeological Collections</li>
         <li>Angela Goebel-Bain, Curator of Historical Collections</li>
         <li>Brittany Jaarsma, Curator of Historical Collection</li> 
         <li>Zachariah Selley, Curator of Archival Collections</li>
@@ -87,9 +87,9 @@
       <h3>Individual Map Credits:</h3>
 
       <div class="indi-maps">
-        <h4>The Barry Lawrence Ruderman Map Collection, courtesy Stanford University Libraries</h4>
+        <h4>The Barry Lawrence Ruderman Map Collection, courtesy of Stanford University Libraries</h4>
         <ul>
-          <li>Le Canada ou Nouvelle France &c. Ce qui set les plus advance vers le Septenrion est tier de dives Relations des Anglois, Danois &c. . . . 1656</li>
+          <li>Le Canada ou Nouvelle France &c. Ce qui est les plus advancé vers le Septentrion est tiré de diverses Relations des Anglois, Danois &c....1656</li>
           <li>Partie Orientale de la Nouvelle France ou du Canada, 1755</li>
         </ul>
 
@@ -98,9 +98,9 @@
           <li>Map of New England and New York, 1676</li>
         </ul>
 
-        <h4>Maine Geospatial Library, Augusta, Maine</h4>
+        <h4>Maine Library of Geographic Information, Augusta, Maine</h4>
         <ul>
-          <li>Map of Maine lands held by Wabanaki tribes, 2026</li>
+          <li>Map of Maine Lands Held by Wabanaki tribes, 2026</li>
           <li>Maine Today, 2026</li>
         </ul>
 
@@ -111,15 +111,15 @@
         
         <h4>Musée des Abénakis</h4>
         <ul>
-          <li>The Ndakina, the W8banaki Nation's Territory, 2023</li>
+          <li>The Ndakina, the W8banaki Nation’s Territory, 2023</li>
         </ul>
         
         <h4>Osher Map Library and Smith Center for Cartographic Education, University of Southern Maine</h4>
         <ul>
-          <li>The Province of Maine, From the best Authorities, 1795</li>
+          <li>The Province of Maine, From the Best Authorities, 1795</li>
           <li>Maine Entworfen von D.F. Sotzmann, 1798</li>
           <li>Maine and the Disputed Territory, 1839</li>
-          <li>Colton's Railroad & Township Map of the State of Maine, 1855</li>
+          <li>Colton’s Railroad & Township Map of the State of Maine, 1855</li>
           <li>Map of the State of Maine Showing Railroads, Towns, Plantations and Wild Lands, 1900</li>
           <li>State Highway Commission Map of Maine, 1935, reprinted 1936</li>
         </ul>
