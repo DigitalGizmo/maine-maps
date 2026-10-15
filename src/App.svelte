@@ -7,7 +7,7 @@
   const isAttract = import.meta.env.VITE_ATTRACT === 'true';
   setContext('isAttract', isAttract);
 
-  const ATTRACT_TIMEOUT = 120_000; // inactivity delay before returning to attract screen
+  const ATTRACT_TIMEOUT = 90_000; // inactivity delay before returning to attract screen
 
   let route = $state(/** @type {{ page: string, slug: string | null }} */ ({ page: isAttract ? 'attract' : 'home', slug: null }));
   let timeoutId = /** @type {number | undefined} */ (undefined);
