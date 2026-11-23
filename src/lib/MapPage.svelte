@@ -123,13 +123,13 @@
     </div>
     <div class="map-nav">
       {#if prevMap}
-        <a href="#/map/{prevSlug}" class="map-nav-prev">← Previous: {prevMap.date}</a>
+        <a href="#/map/{prevSlug}" class="map-nav-prev" aria-label="Previous: {prevMap.date}">← <span class="nav-label">Previous: {prevMap.date}</span></a>
       {:else}
         <span class="map-nav-prev map-nav-inactive"></span>
       {/if}
       <span class="map-nav-current">{mapset.date}</span>
       {#if nextMap}
-        <a href="#/map/{nextSlug}" class="map-nav-next">Next: {nextMap.date} →</a>
+        <a href="#/map/{nextSlug}" class="map-nav-next" aria-label="Next: {nextMap.date}"><span class="nav-label">Next: {nextMap.date}</span> →</a>
       {:else}
         <span class="map-nav-next map-nav-inactive"></span>
       {/if}
@@ -398,32 +398,74 @@
     }
 
     .site-header {
-      gap: 4vw;
+      gap: 2vw;
     }
 
     .site-nav {
-      font-size: 1rem;
+      font-size: 1.15rem;
+      white-space: nowrap;
       padding: 0.4rem 1.5em 0.4rem 0.75em;
     }
 
+    .site-nav :global(.hamburger-btn) {
+      font-size: 1.75rem;
+    }
+
+    /* Orange bar: arrows + current date only, sized to content */
     .map-nav {
-      padding: 0.4rem 0.75em;
+      flex: 0 0 auto;
+      gap: 0.5em;
+      padding: 0.4rem 1.25em 0.4rem 1.5em;
+    }
+
+    .nav-label {
+      display: none;
     }
 
     .map-nav a {
-      font-size: 0.75rem;
+      font-size: 1.5rem;
+      line-height: 1;
     }
 
     .map-nav-current {
-      font-size: 1.1rem;
+      font-size: 1.3rem;
     }
 
+    .map-nav-inactive {
+      width: 1em;
+    }
+
+    /* Map full width (capped at 65vh tall), thumbnails in a row below */
     .viewer-panel {
-      padding-left: 0.5em;
+      flex-direction: column;
+      padding: 0 1rem;
+      gap: 0.4rem;
     }
 
     .image-area {
-      height: min(50vh, calc((100vw - 110px) / var(--ar)));
+      width: min(100%, calc(65vh * var(--ar)));
+      height: auto;
+    }
+
+    .thumbs {
+      padding-left: 0;
+    }
+
+    .thumbs ul {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .thumbs ul li {
+      width: 44px;
+      height: 44px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .thumb-label {
+      display: none;
     }
 
     .text-panel {

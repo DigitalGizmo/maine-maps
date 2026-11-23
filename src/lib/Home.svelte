@@ -25,12 +25,13 @@
 
 <header>
   <div class="banner-slant-right">
-    <!-- <HamburgerMenu maps={mapSets} /> -->
-    <h1>Mapping Maine</h1>
+    <div class="title-row">
+      <h1>Mapping Maine</h1>
+    </div>
     <h2>Explore this place we call Maine and learn how the land's use has changed over time.</h2>
     <p class="credits"><a href="/" onclick={(e) => { e.preventDefault(); showCredits(); }}>Credits</a></p>
   </div>
-  <p class="prompt">Scroll for more maps. Tap a map to explore.</p>
+  <p class="prompt"><span class="desktop-only">Scroll for more maps.</span> Tap a map to explore.</p>
 </header>
 
 {#if error}
@@ -309,43 +310,128 @@
       height: auto;
     }
 
+    /* Header: blue slanted bar holds only burger + title; intro text sits below */
     header div.banner-slant-right {
       min-width: unset;
       max-width: unset;
-      width: 100%;
       height: auto;
-      min-height: 60px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.1em;
-      padding: 0.6em 1em;
-      box-sizing: border-box;
+      padding: 0;
+      background: none;
     }
 
     header div.banner-slant-right:before {
       display: none;
     }
 
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+      width: fit-content;
+      background-color: #015f82;
+      padding: 0.3em 2.25em 0.3em 0.75em;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+    }
+
     header h1 {
-      font-size: 1.1em;
+      font-size: 1.5rem;
     }
 
     header h2 {
-      font-size: 0.8em;
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.3;
+      padding: 0.6em 1rem 0;
+    }
+
+    header p.credits {
+      margin: 0.4em 1rem 0;
+      font-size: 0.85rem;
     }
 
     header p.prompt {
-      font-size: 1.1em;
-      padding: 0.5em 1em;
+      font-size: 1.05rem;
+      font-weight: 400;
+      text-align: left;
+      padding: 0 1rem;
+      margin: 0.5em 0 0.75em;
+    }
+
+    .desktop-only {
+      display: none;
+    }
+
+    /* Map list: full-width stacked rows instead of horizontal scroll */
+    .main-menu {
+      overflow-x: visible;
     }
 
     .main-menu ul {
-      margin-top: 1vh;
+      width: auto;
+      margin: 0;
     }
 
     .main-menu ul li {
-      width: 72vw;
-      height: 55vh;
+      display: block;
+      width: auto;
+      max-width: none;
+      height: auto;
+      margin: 0 0 3px;
+    }
+
+    /* Grid: image fills left column; row 1 is the band (date | title), row 2 is the blurb.
+       name-block becomes display: contents so title and blurb are grid items,
+       which keeps the band the same height across both halves. */
+    .main-menu ul li a {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      min-height: 40vw;
+      position: relative;
+    }
+
+    /* Absolute so the image's natural height doesn't stretch the row */
+    .main-menu ul li img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .main-menu ul li h3.date {
+      grid-area: 1 / 1;
+      position: relative;
+      top: 0;
+      width: auto;
+      margin: 0;
+      padding: 0.2em 0.5em;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .main-menu ul li a div.name-block {
+      display: contents;
+    }
+
+    .main-menu ul li h3.map-name {
+      grid-area: 1 / 2;
+      background-color: #015f82;
+      font-size: 1.05rem;
+      line-height: 1.2;
+      padding: 0.4em 0.6em;
+      display: flex;
+      align-items: center;
+    }
+
+    .main-menu ul li p.map-blurb {
+      grid-area: 2 / 2;
+      background-color: #222;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      padding: 0.5em 0.6em 0.75em;
     }
   }
 </style>
