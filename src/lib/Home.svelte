@@ -304,8 +304,8 @@
     font-style: italic;
   }
 
-  /* ── Mobile portrait (phones) ── */
-  @media (max-width: 480px) {
+  /* ── Narrow portrait (phones, small tablets) ── */
+  @media (max-width: 700px) {
     header {
       height: auto;
     }

@@ -193,7 +193,7 @@
       "header"
       "viewer"
       "text";
-    grid-template-rows: 70px auto minmax(0, 24vh);
+    grid-template-rows: 70px auto auto;
   }
 
   /* ── Header ── */
@@ -231,7 +231,7 @@
     padding: 1rem 2em;
     flex: 1;
     min-width: 0;
-    clip-path: polygon(24px 0, 100% 0, calc(100% - 24px) 100%, 0 100%);
+    clip-path: polygon(24px 0, 100% 0, 100% 100%, 0 100%);
   }
 
   .map-nav a {
@@ -350,8 +350,7 @@
   /* ── Text panel ── */
   .text-panel {
     grid-area: text;
-    overflow-y: auto;
-    padding: 0 2rem 3rem 0;
+    padding: 0 2rem 3rem 2rem;
     opacity: 0;
     transition: opacity 0.75s ease;
   }
@@ -384,8 +383,8 @@
     line-height: 1.5;
   }
 
-  /* ── Mobile portrait (phones) ── */
-  @media (max-width: 480px) {
+  /* ── Narrow portrait (phones, small tablets) ── */
+  @media (max-width: 840px) {
     .map-page {
       grid-template-rows: 55px auto auto;
     }
